@@ -1,0 +1,115 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Proses Pengmudi Bermasalah</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li class="active">Open Block Pengemudi</a></li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('content'); ?>
+
+ 	<div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Masukan Nomor BAP untuk membuka blocking</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+          <br>
+          <?php echo  Form::open('proses/openblock') ; ?>
+          <div class="form-inline">
+              <input type="text" name="bap_number" <?php if($show): ?> value="<?php echo  $bap_number ; ?>" <?php endif; ?> >
+              <button class="btn btn-info" type="submit"><i class="icon-search"></i></button>
+          </div>
+          <?php echo  Form::close() ; ?>
+            <br> 
+        </div>
+    </div>
+<?php if($show): ?>
+	
+	<div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup2" data-toggle="collapse">Proses Open Block Pengemudi</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup2">
+        	<br>
+          	<?php if($bap): ?>
+          		<?php if($bap->keputusan_id == 7): ?>
+          			
+          			<input type="hidden" id="bap_id" name="bap_id" value="<?php echo  $bap->id ; ?>">
+          			<blockquote>
+					  	<small>Silahkan Otorisasi pembukaan block </small>
+					</blockquote>
+          			<div class="row-fluid">
+				        <div class="span6">
+				          Otorisasi 1 <br>
+				          <strong><?php echo  $user->fullname ; ?></strong>
+				        </div>
+				        <div class="span6">
+				          Otorisasi 2 <br>
+				        <input name="username" type="text" id="username" placeholder="username"><br>  
+				        <input name="password" type="password" id="password" placeholder="password">
+				        </div>
+				     </div>
+
+				    <button type="button" id="btnSave" class="btn btn-success">Open Blocking</button>
+				    <br>
+				    
+          		<?php else: ?>
+          			<blockquote>
+					  	<small>Maaf dari hasil keputusan bap pengemudi tidak di izinkan beroperasi untuk sementara</small>
+					</blockquote>
+          		<?php endif; ?>
+          	<?php else: ?>
+          			<blockquote>
+					  	<small>Nomor BAP Tidak di temukan ! </small>
+					</blockquote>
+          	<?php endif; ?>
+
+          	<br>
+        </div>
+    </div>
+
+<?php endif; ?>
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+  //penggunaan post javasript
+   var rootURL = '<?php echo  URL::base().'/proses' ; ?>';
+
+   $('#btnSave').click(function(){
+      openblock();
+      return false;
+   });
+
+   function openblock()
+   {
+      var dataJSON = JSON.stringify({
+          "username": $('#username').val(), 
+          "password": $('#password').val(), 
+          "bap_id": $('#bap_id').val(), 
+          });
+
+        console.log('Open Block Proses');
+        $.ajax({
+          type: 'POST',
+          contentType: 'application/json',
+          url: rootURL + '/otorisasi',
+          dataType: "json",
+          data: dataJSON,
+          success: function(data){
+            if(data.status){
+              alert(data.msg);
+            }else{
+              alert(data.msg);
+            }
+          }
+        });
+   }
+</script>
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

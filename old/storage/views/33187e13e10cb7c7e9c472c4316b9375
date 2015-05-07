@@ -1,0 +1,109 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Berkas BAP Harian</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li class="active">Berkas BAP</a></li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+  
+<?php \Laravel\Section::start('content'); ?>
+
+    <div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Berkas BAP</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+          <br>
+          <form method="get" class="form-inline">
+              <div class="input-append date" id="datepicker" data-date="<?php echo  $date ; ?>" data-date-format="yyyy-mm-dd">
+                  <input name="date" id="date" class="input-small" type="text" value="<?php echo  $date ; ?>">
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+              </div> 
+              <button class="btn btn-info" id="view"><i class="icon-search"></i></button>
+          </form>
+            <br> 
+        </div>
+    </div>
+
+    <div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup2" data-toggle="collapse">Berkas BAP Harian</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup2">
+          <br>
+
+            <table class="table table-condensed table-striped" id="tabelBap">
+            <thead>
+
+              <tr>
+                <th class="span1">No.</th>
+                <th>No. BAP</th>
+                <th>Body</th>
+                <th>NIP</th>
+                <th>Pengemudi</th>
+                <th>Proses Oleh</th>
+                <th>Diotorisasi Oleh</th>
+                <th>Waktu Proses</th>
+              </tr>
+            
+            </thead>
+            <?php $no=1; ?>
+              <tbody>
+                <?php foreach($baps as $bap): ?>
+                <?php $fleet = Fleet::find($bap->fleet_id); ?>
+                <?php $driver = Driver::find($bap->driver_id); ?>
+                <tr>
+                  <td><?php echo  $no ; ?></td>
+                  <td><a href="#" data-identity="<?php echo  $bap->id ; ?>"><?php echo  $bap->bap_number ; ?></a></td>
+                  <td><?php if($fleet): ?> <?php echo  $fleet->taxi_number ; ?> <?php endif; ?></td>
+                  <td><?php if($driver): ?> <?php echo  $driver->nip ; ?> <?php endif; ?></td>
+                  <td><?php if($driver): ?> <?php echo  $driver->name ; ?> <?php endif; ?></td>
+                  <td><?php echo  User::find($bap->user_id)->fullname ; ?></td>
+                  <td> 
+                  <?php $otorisasi = User::find($bap->otorisasi2_id) ?>
+                    <?php if($otorisasi): ?>
+                      <?php echo  $otorisasi->fullname ; ?>
+                    <?php endif; ?>
+                  </td>
+                  <td><?php echo  $bap->last_update ; ?></td>
+                </tr>
+                <?php $no++; ?>
+                <?php endforeach; ?>
+              </tbody>
+            
+            </table>
+            
+          <br> 
+        </div>
+    </div>
+
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+
+var rootURL = '<?php echo  URL::base().'/reports' ; ?>';
+
+$(function () {
+        $('#datepicker').datepicker({
+              format: 'yyyy-mm-dd',
+              //viewMode: "months", 
+              //minViewMode: "months"
+          });
+});
+  $('#tabelBap a').live('click', function() {
+        var url = '<?php echo  URL::base(); ?>/cardcontrols/sbap/' + $(this).data('identity');
+        window.open( url, "BERITA ACARA PROSES PENGEMUDI", "menubar=0,location=0,height=760,width=1000" );
+        return false;
+  });
+      
+</script>
+  
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

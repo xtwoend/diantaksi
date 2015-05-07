@@ -1,0 +1,77 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">News </h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('news'); ?>">Management News</a></li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+<?php \Laravel\Section::start('content'); ?>
+
+<div class="block">
+        <div class="block-heading">
+             <span class="block-icon pull-right">
+              <a href="<?php echo  URL::to('news/add') ; ?>" class="btn btn-info" >Tambah Pesan</a>
+            </span>
+            <a href="#widgetGroup2" data-toggle="collapse">List Pesan </a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup2">
+          <br>
+
+            <table class="table table-condensed table-striped">
+            <thead>
+
+              <tr>
+                <th class="span1">No.</th>
+                <th>Msg Type</th>
+                <th>Message</th>
+                <th>Create At</th>
+                <th>Expired</th>
+                <th>By.</th>
+                <th></th>
+              </tr>
+            
+            </thead>
+            <?php $no=1; ?>
+              <tbody>
+               <?php foreach($messages as $news): ?>
+                <tr>
+                    <td><?php echo  $no ; ?></td>
+                    <td>
+                        <?php if($news->msg_type == 1): ?>
+                           <span class="label <?php echo  $news->priority ; ?>">Broadcast </span>
+                        <?php elseif($news->msg_type == 2): ?>
+                            <span class="label <?php echo  $news->priority ; ?>">To : <?php echo  Pool::find($news->pool_id)->pool_name ; ?></span>
+                        <?php else: ?>
+                            <span class="label <?php echo  $news->priority ; ?>">To : <?php echo  User::find($news->user_id)->fullname ; ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo  $news->message ; ?></td>
+                    <td><?php echo  $news->created_at ; ?></td>
+                    <td><?php echo  $news->expired ; ?></td>
+                    <td><?php echo  User::find($news->user_id)->fullname ; ?></td>
+                    <td><a href="<?php echo  URL::to('news/delete/'.$news->id)  ; ?>" class="btn btn-mini btn-danger">Hapus</a></td>
+                </tr>
+                <?php $no++ ?>
+               <?php endforeach; ?>
+              </tbody>
+            
+            </table>
+            
+          <br> 
+        </div>
+    </div>
+
+
+<?php \Laravel\Section::stop(); ?>
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

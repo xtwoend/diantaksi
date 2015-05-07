@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<head>
+<style type="text/css">
+/*yang ini buat setting ukuran kertasnya assumsi KECIL */
+#KERTASKECIL {
+	background-color:#FFFFFF;
+	left:0px;
+	right:0px;
+	height:5.30in ; /*Ukuran Panjang Kertas */
+	width: 3.80in; /*Ukuran Lebar Kertas */
+	margin:1px solid #FFFFFF;
+	border: 1px solid #000;
+	font-size: .8em;
+	font-family:Tahoma, Geneva, sans-serif;
+	position: fixed;
+}
+#content {
+	padding: 10px 10px 10px 10px;
+}
+h1 {
+	font-size: 1.4em;
+}
+</style>
+</head>
+<body>
+<div id="KERTASKECIL">
+	<div id="content">
+<table cellspacing="0" cellpadding="0">
+			  <col width="80" />
+			  <col width="135" />
+			  <col width="90" />
+			  <col width="150" />
+			  <tr>
+			    <td colspan="4" align="center">BUKTI SETORAN PENGEMUDI</td>
+			  </tr>
+			  <tr>
+			    <td colspan="4" align="center">PT. DHARMA INDAH AGUNG METROPOLITAN</td>
+			  </tr>
+			  <tr>
+			    <td>&nbsp;</td>
+			    <td></td>
+			    <td></td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			    <td>NIP</td>
+			    <td>: <?php echo  $driverinfo->nip ; ?></td>
+			    <td>NO PINTU</td>
+			    <td>: <?php echo  $fleetinfo->taxi_number ; ?></td>
+			  </tr>
+			  <tr>
+			    <td>NAMA</td>
+			    <td>: <?php echo  $driverinfo->name ; ?></td>
+			    <td>POOL</td>
+			    <td>: <?php echo  $pool->pool_name ; ?></td>
+			  </tr>
+			  <tr>
+			    <td>TANGGAL</td>
+			    <td>: <?php echo  $dateops ; ?></td>
+			    <td></td>
+			    <td></td>
+			  </tr>
+			  <tr>
+			</table>
+======================================<br>
+RINCIAN SETORAN HARI INI <br>
+======================================<br>
+Setoran 	: <?php echo  $setoran['setoran_wajib'] ; ?><br>
+Tab S'Part	: <?php echo  $setoran['tab_sp'] ; ?><br>
+Denda		: <?php echo  $setoran['denda'] ; ?><br>
+
+Cicilan	<br>
+======================================<br>
+KS			: <?php echo  $setoran['tag_ks'] ; ?><br>
+Sapare Part	: <?php echo  $setoran['tag_spart'] ; ?><br>
+DP 			: <?php echo  $setoran['tag_cicilan_dp'] ; ?><br>
+DP S' Part	: <?php echo  $setoran['tag_dp_spart'] ; ?><br>
+Hutang Lama	: <?php echo  $setoran['tag_hut_lama'] ; ?><br>
+Lain - Lain	: <?php echo  $setoran['tag_other'] ; ?><br>
+
+Iuran Laka	: <?php echo  $setoran['iuran_laka'] ; ?><br>
+Biaya TC	: <?php echo  $setoran['biaya_tc'] ; ?><br>
+=======================================<br>
+TOTAL 		: <?php echo  $setoran['total'] ; ?><br>
+=======================================<br>
+SETORAN 	: <?php echo  $setoran['cash'] ; ?><br>
+=======================================<br>
+POTONGAN	: <?php echo  $setoran['pot'] ; ?><br>
+=======================================<br>
+KURANG SETOR: <?php echo  $setoran['ks'] ; ?><br>
+
+	</div>
+</div>
+</body>
+</html>

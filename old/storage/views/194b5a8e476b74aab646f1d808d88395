@@ -1,0 +1,148 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Daftar Armada</h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('fleets'); ?>">Fleets CMS</a> <span class="divider">/</span></li>
+        <li class="active">Add Fleets</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+<?php \Laravel\Section::start('content'); ?>
+
+<div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Form Armada</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+            <br>
+          <div class="row-fluid"> <!-- Start pembagian kolom -->
+            <form class="form-horizontal" action="<?php echo  URL::current() ; ?>" method="POST">
+              <div class="span12">
+                
+                  <div class="control-group">
+                    <label class="control-label" for="name">Nomor Body</label>
+                    <div class="controls">
+                      <input type="text" id="taxi_number" name="taxi_number" placeholder="Ketikan Nomor Body" <?php if(!$create): ?> value="<?php echo $fleet->taxi_number; ?>" <?php endif; ?>>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="police_number">Nomor Polisi</label>
+                    <div class="controls">
+                      <input type="text" id="police_number" name="police_number" placeholder="police number" <?php if(!$create): ?> value="<?php echo $fleet->police_number; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+<!--
+                  <div class="control-group">
+                    <label class="control-label" for="inputtext">TTL</label>
+                    <div class="controls">
+                      <input type="text" id="brith_place" name="brith_place" placeholder="Tempat Lahir" <?php if(!$create): ?> value="<?php echo $fleet->brith_place; ?>" <?php endif; ?> >
+                      <div class="input-append date" id="datepicker" data-date="<?php echo  date('Y-m-d') ; ?>" data-date-format="yyyy-mm-dd">
+                        <input name="date_of_birth" class="input-small" id="date_of_birth" type="text" <?php if(!$create): ?> value="<?php echo $fleet->date_of_birth; ?>" <?php endif; ?>>
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+-->
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Nomor Mesin</label>
+                    <div class="controls">
+                      <input type="text" id="engine_number" name="engine_number" placeholder="engine number" <?php if(!$create): ?> value="<?php echo $fleet->engine_number; ?>" <?php else: ?> <?php endif; ?> >
+                    </div>
+                  </div>
+
+                   <div class="control-group">
+                    <label class="control-label" for="pool">Nomor Rangka</label>
+                    <div class="controls">
+                      <input type="text" id="chassis_number" name="chassis_number" placeholder="chassis number" <?php if(!$create): ?> value="<?php echo $fleet->chassis_number; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Pool</label>
+                    <div class="controls">
+                        <?php echo  Form::select('pool_id', $pools , ($create) ? '': $fleet->pool_id ) ; ?>
+                    </div>
+                  </div>
+
+                 
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Merek</label>
+                    <div class="controls">
+                        <?php echo  Form::select('fleet_brand_id', $brands, ($create) ? '': $fleet->fleet_brand_id  ) ; ?>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Model</label>
+                    <div class="controls">
+                        <?php echo  Form::select('fleet_model_id', $models, ($create) ? '': $fleet->fleet_model_id  ) ; ?>
+                    </div>
+                  </div>
+
+                   <div class="control-group">
+                    <label class="control-label" for="pool">Keanggotaan Laka </label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('fg_laka', '1', ($create) ? '' : ($fleet->fg_laka == 1) ? true : false ) ; ?>
+                          
+                      </label>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Stiker Bandara</label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('fg_bandara', '1', ($create) ? '' : ($fleet->fg_bandara == 1) ? true : false ) ; ?>
+                          
+                      </label>
+                  </div>
+
+                   <div class="control-group">
+                    <label class="control-label" for="pool">Telah Di KSO kan</label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('fg_kso', '1', ($create) ? '' : ($fleet->fg_kso == 1) ? true : false ) ; ?>
+                          
+                      </label>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Telah Setoran</label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('fg_setor', '1', ($create) ? '' : ($fleet->fg_setor == 1) ? true : false ) ; ?>
+                          
+                      </label>* Note ini diedit jika terjadi kesalahan pada operasi jika armada masih di nyatakan belum setoran padahal sudah
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">On Group</label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('fg_group', '1', ($create) ? '' : ($fleet->fg_group == 1) ? true : false ) ; ?>
+                          
+                      </label>* Note ini diedit jika terjadi edit di doo
+                  </div>
+              </div>
+              
+             <input type="reset" class="btn" value="Reset"> <input type="submit" class="btn btn-primary" value="Simpan"> 
+               </form>
+          </div>  <!-- end pembagian kolom -->
+        </div>
+</div>
+
+ 
+
+<?php \Laravel\Section::stop(); ?>
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+$(function () {
+        $('#datepicker').datepicker({
+              format: 'yyyy-mm-dd'
+          });
+  });
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

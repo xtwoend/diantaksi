@@ -1,0 +1,145 @@
+<div class="modal hide fade" id="edit_sparepart">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Form Stock Sparepart</h3>
+      </div>
+      {{ Form::open('warehouses/stocksave', 'POST', array('class'=>'form-horizontal')) }}
+      <div class="modal-body">
+        <div class="control-group">
+          <label class="control-label" for="part_number">Nomor Sparepart</label>
+          <div class="controls">
+              <div class="input-append span12">
+                  <input id="part_number" name="part_number" type="text" placeholder="Ketikan Nomor Part" value="{{ ($create)? '': $sp->part_number }}">
+                  <button class="btn" type="button" id="cari">Cari</button>
+              </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="name_sparepart">Nama Sparepart</label>
+          <div class="controls">
+            {{ Form::text('name_sparepart', ($create)? '': $sp->name_sparepart , array('id'=>'name_sparepart')) }}
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" for="sale_price">Harga Jual</label>
+          <div class="controls">
+            {{ Form::text('sale_price', ($create)? '': $sp->sale_price,array('class'=>'money')) }}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="qty">Stock Awal</label>
+          <div class="controls">
+            <?php $att = ($create)? array() : array('readonly'=>true); ?>
+            {{ Form::text('qty', ($create)? '': $sp->qty , $att) }}
+          </div>
+        </div>
+        @if(!$create)
+        <div class="control-group">
+          <label class="control-label" for="qty">Penyesuaian Stock</label>
+          <div class="controls">
+            {{ Form::text('new_qty', ($create)? '': '') }} gunakan ( - ) untuk mengeluarkan barang dari gudang 
+          </div>
+        </div>
+        @endif
+        <div class="control-group">
+          <label class="control-label" for="min_qty">Minimal Stock</label>
+          <div class="controls">
+            {{ Form::text('min_qty', ($create)? '': $sp->min_qty) }}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="isi_satuan">Isi Satuan</label>
+          <div class="controls">
+            {{ Form::text('isi_satuan', ($create)? '': $sp->isi_satuan, array('id'=>'isi_satuan')) }}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="satuan">Satuan</label>
+          <div class="controls">
+            {{ Form::text('satuan', ($create)? '': $sp->satuan, array('id'=>'satuan')) }}
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" for="note">Catatan</label>
+          <div class="controls">
+            {{ Form::textarea('note', ($create)? '': $sp->note, array('rows'=> '2' )) }}
+          </div>
+        </div>
+
+
+        <div class="control-group">
+          <label class="control-label" for="satuan">Last Update</label>
+          <div class="controls">
+            {{ Form::text('updated_at', ($create)? '': $sp->updated_at, array('readonly'=>true)) }}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="satuan">Oleh</label>
+          <div class="controls">
+            {{ Form::text('updated_at', ($create)? '': User::find($sp->user_id)->fullname, array('readonly'=>true)) }}
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <a data-toggle="modal" href="#edit_sparepart" class="btn">Cancel</a>
+        {{ Form::hidden('id', ($create)? '': $sp->stock_id) }}
+        <input type="submit" class="btn btn-warning" value="Save" />
+      </div>
+      {{ Form::close() }}
+</div>
+
+<script type="text/javascript">
+
+$(function () {
+  $('.money').money_field({width: 120});
+  $('#edit_sparepart').modal('show');
+
+  $('#part_number').typeahead({
+                             
+                source: 
+                    function (query, process) {
+                        $.getJSON('{{ URL::base() }}/sparepart/autopart', { query: query }, function(json) {    
+                              objects = [];
+                              map = {};
+                              $.each(json, function(i, object){
+                                map[object.part_number] = object;
+                                objects.push(object.part_number);
+                              });
+                              process(objects);
+                        });
+                    },
+                    updater: function(item){
+                      $('#name_sparepart').val(map[item].name_sparepart);
+                      $('#satuan').val(map[item].satuan);
+                      $('#isi_satuan').val(map[item].isi_satuan);                      
+                      //alert('Your Selected ID' + map[item].id );
+                      return item; 
+                    }, 
+                    highlighter: function (item) {
+                      var desc = map[item].name_sparepart;
+                      var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                      var value = item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return '<strong>' + match + '</strong>'
+                      });
+                      return value + '  ( ' + desc + ' )' ;
+                    },
+                   
+                    minLength: 2
+  });
+
+});
+
+$('#cari').click(function(){
+    var url = '{{ URL::base() }}/sparepart/search';
+    window.open( url, "Search Sparepart", "width=500,toolbar=1,resizable=1,scrollbars=yes,height=430,top=100,left=100" );
+    return false;
+});
+
+</script>

@@ -1,0 +1,172 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Report Check In & Out Harian</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li class="active">Check In & Out</a></li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+  
+<?php \Laravel\Section::start('content'); ?>
+
+    <div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Check In & Out</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+          <br>
+          <form method="get" class="form-inline">
+              <div class="input-append date" id="datepicker" data-date="<?php echo  $date ; ?>" data-date-format="yyyy-mm-dd">
+                  <input name="date" id="date" class="input-small" type="text" value="<?php echo  $date ; ?>">
+                  <span class="add-on"><i class="icon-calendar"></i></span>
+              </div> 
+              <button class="btn btn-info" id="view"><i class="icon-search"></i></button>
+          </form>
+            <br> 
+        </div>
+    </div>
+
+    <div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup2" data-toggle="collapse">Report Check In & Out Harian</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup2">
+          <br>
+
+            <table class="table table-condensed table-striped">
+            <thead>
+
+              <tr>
+                <th class="span1">No.</th>
+                <th>Body</th>
+                <th>NIP</th>
+                <th>Pengemudi</th>
+                <th>Waktu Cetak SPJ</th>
+                <th>Waktu Keluar Pool</th>
+                <th>KM Keluar</th>
+                <th>Waktu Masuk Pool</th>
+                <th>KM Masuk</th>
+                <th>Shift</th>
+                <th>Status OPS</th>
+                <th>Action</th>
+              </tr>
+            
+            </thead>
+            <?php $no=1; ?>
+              <tbody>
+                <?php foreach($checkout as $out): ?>
+                <?php $fleet = Fleet::find($out->fleet_id); ?>
+                <?php $driver = Driver::find($out->driver_id); ?>
+                <tr>
+                  <td><?php echo  $no ; ?></td>
+                  <td><?php if($fleet): ?> <?php echo  $fleet->taxi_number ; ?> <?php endif; ?></td>
+                  <td><?php if($driver): ?> <?php echo  $driver->nip ; ?> <?php endif; ?></td>
+                  <td><?php if($driver): ?> <?php echo  $driver->name ; ?> <?php endif; ?></td>
+                  <td><?php echo  $out->printspj_time ; ?></td>
+                  <td><?php echo  $out->checkout_time ; ?></td>
+                  <td>
+                    <?php
+                      $last_operasi = date('Y-m-d', strtotime($out->operasi_time. ' -1 days'));
+                      $last_checkin = Checkin::where_fleet_id($out->fleet_id)->where_operasi_time($last_operasi)->first();
+                      
+                      if($last_checkin ){
+                        echo $last_checkin->km_fleet;
+                      }
+                    ?>
+                  </td>
+                  <td><?php echo  $out->checkin_time ; ?></td>
+                  <td><?php echo  $out->km_fleet ; ?></td>
+                  <td><?php echo  Shift::find($out->shift_id)->shift ; ?></td>
+                  <td><?php echo  Statusoperasi::find($out->operasi_status_id)->kode ; ?></td>
+                  <td>Lihat Data Cheklist</td>
+                </tr>
+                <?php $no++; ?>
+                <?php endforeach; ?>
+              </tbody>
+            
+            </table>
+            
+          <br> 
+        </div>
+    </div>
+
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+
+var rootURL = '<?php echo  URL::base().'/reports' ; ?>';
+
+$(function () {
+        $('#datepicker').datepicker({
+              format: 'yyyy-mm-dd',
+              //viewMode: "months", 
+              //minViewMode: "months"
+          });
+});
+  /*
+      findAll($('#date').val());
+      
+      $('#view').click(function(){
+        findAll($('#date').val());
+        return false;
+      });
+
+      
+      function findAll(date) {
+        console.log('findAll');
+        $.ajax({
+          type: 'GET',
+          url: rootURL + '/datadaily/' + date,
+          dataType: "json", // data type of response
+          success: function (data) {
+              $('#container').highcharts({
+                  chart: {
+                      type: 'line',
+                      marginRight: 130,
+                      marginBottom: 25
+                  },
+                  title: {
+                      text: 'Setoran Operasi Dalam 1 Bulan',
+                      x: -20 //center
+                  },
+                  xAxis: {
+                      categories: data.categories
+                  },
+                  yAxis: {
+                      title: {
+                          text: 'Total Setoran Operasi (1.000.000)'
+                      },
+                      plotLines: [{
+                          value: 0,
+                          width: 1,
+                          color: '#808080'
+                      }]
+                  },
+                  tooltip: {
+                      valueSuffix: ' (Rp)'
+                  },
+                  legend: {
+                      layout: 'vertical',
+                      align: 'right',
+                      verticalAlign: 'top',
+                      x: -10,
+                      y: 100,
+                      borderWidth: 0
+                  },
+                  series: data.series
+              });
+          }
+        });
+      }
+      */
+      
+</script>
+  
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

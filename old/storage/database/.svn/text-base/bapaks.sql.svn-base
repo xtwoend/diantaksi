@@ -1,0 +1,1 @@
+CREATE VIEW `bapak_asuh_financial_daily` AS select *, ( select user_id from anak_asuh asu where fr.fleet_id = asu.fleet_id and asu.status = 1 limit 0,1) as bapak_asuh from financial_report_monthly_bykso fr ;

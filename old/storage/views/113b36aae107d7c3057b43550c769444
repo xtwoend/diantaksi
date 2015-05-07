@@ -1,0 +1,43 @@
+                          <table class="table table-condensed table-hover">
+                            <thead>
+                              <tr> 
+                                  <th class="span1">No. </th>
+                                  <th class="span3">Analisa Benkel</th>
+                                  <th class="span1"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              
+                            <?php if($analisitems): ?>
+                              <?php $no =1; ?>
+                              <?php foreach($analisitems as $item): ?>
+                              <tr id="analisrow_<?php echo  $item->id ; ?>">
+                                  <td><?php echo  $no ; ?></td>
+                                  <td><?php echo  $item->analisa ; ?></td>
+                                  <td><a rel="<?php echo  $item->id ; ?>" class="delete_analis btn btn-mini btn-danger"><i class="icon icon-white icon-remove"></i></a></td>
+                              </tr>
+                              <?php $no++ ?>
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="5">data item is empty.</td>
+                              </tr>
+                            <?php endif; ?>
+                            </tbody>
+                          </table>
+<script type="text/javascript">
+var wo_id_inpart = '<?php echo  $wo_id_initem ; ?>';
+ $('.delete_analis').each(function(index,elem) {
+          $(elem).click(function(){
+            var id = $(elem).attr('rel');
+            
+            var r=confirm("Anda yakin akan menghapus item ini?")
+            if (r==true)
+              {
+                $.get( rootURL + '/analisa_item_remove/' + id + '/' + wo_id_inpart);
+                $("#analisrow_" + id).remove();
+              }
+            
+          });
+      });
+</script>

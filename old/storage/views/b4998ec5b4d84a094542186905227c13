@@ -1,0 +1,68 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Daftar Pengemudi</h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('anakasuh/manage'); ?>">Manage Bapak Asuh</a> <span class="divider">/</span></li>
+        <li class="active">Add Anak Asuh</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+<?php \Laravel\Section::start('content'); ?>
+
+<div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Form Add Anak Asuh</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+            <br>
+          <div class="row-fluid"> <!-- Start pembagian kolom -->
+            <form class="form-horizontal" action="<?php echo  URL::current() ; ?>" method="POST">
+              <div class="span12">
+                
+                  <div class="control-group">
+                    <label class="control-label" for="name">Nomor Body</label>
+                    <div class="controls">
+                       <?php echo  Form::select('fleet_id', $fleets , ($create) ? '': $anakasuh->fleet_id ) ; ?>
+                    </div>
+                  </div>
+
+                  
+
+                  <div class="control-group">
+                    <label class="control-label" for="inputtext">Tanggal</label>
+                    <div class="controls">
+                     <div class="input-append date" id="datepicker" data-date="<?php echo  date('Y-m-d') ; ?>" data-date-format="yyyy-mm-dd">
+                        <input name="start_date" class="input-small" id="start_date" type="text" <?php if(!$create): ?> value="<?php echo $anakasuh->start_date; ?>" <?php endif; ?>>
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+
+              </div>
+              
+             <input type="reset" class="btn" value="Reset"> <input type="submit" class="btn btn-primary" value="Simpan"> 
+               </form>
+          </div>  <!-- end pembagian kolom -->
+        </div>
+</div>
+
+ 
+
+<?php \Laravel\Section::stop(); ?>
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+$(function () {
+        $('#datepicker').datepicker({
+              format: 'yyyy-mm-dd'
+          });
+  });
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

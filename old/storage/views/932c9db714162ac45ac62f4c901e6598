@@ -1,0 +1,100 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Fleet Schedule Groups</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('schedule'); ?>">Schedule</a> <span class="divider">/</span></li>
+        <li class="active">Groups</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+
+<?php \Laravel\Section::start('content'); ?>
+     
+<div class="row-fluid">
+	<?php foreach($schedulemasters as $master): ?>
+    <div class="block">
+       <div class="block-heading">
+            <span class="block-icon pull-right span1">
+               <center><a href="<?php echo URL::to('schedule/addtogroup'); ?>?mstr_schedule=<?php echo $master->id; ?>"> New </a></center>
+            </span>
+
+            <a href="#widget<?php echo $master->id; ?>" data-toggle="collapse">Groups <?php echo $master->name; ?> </a>
+        </div>
+        <div class="block-body collapse in" id="widget<?php echo $master->id; ?>">
+            <table class="table table-condensed table-bordered table-striped table-small">
+           		<?php //  loop group in pool --}} ?>           		<?php if (count(Schedulegroup::where('schedule_master_id','=',$master->id)->where('pool_id','=',Auth::user()->pool_id)->get()) > 0): ?><?php foreach( Schedulegroup::where('schedule_master_id','=',$master->id)->where('pool_id','=',Auth::user()->pool_id)->get() as $group ): ?>	
+           		<tr>
+	                <td class="span2"><span class="label">Group #<?php echo  $group->group ; ?> </span> <a class="delete_toggler btn btn-mini btn-danger" rel="<?php echo  $group->id ; ?>"> Delete </a></td>
+	                <td class="span8">
+	                	<?php //  loop fleet in group --}} ?>	                	<?php foreach(Schedulefleetgroup::where('schedule_group_id','=', $group->id )->get() as $fleet): ?>
+                    <?php $fleetz = Fleet::find($fleet->fleet_id); ?>	
+                      <?php if($fleetz): ?>
+  	                		<span class="label label-info"><?php echo  $fleetz->taxi_number ; ?></span> 
+                        <?php 
+                          $x = Schedule::where('fleet_id','=',$fleet->fleet_id)
+                                    //->where('month','=',date('n',time()))
+                                    ->where('year','=',date('Y',time()))
+                                    ->order_by('month','desc')->first();
+                          if($x) {
+                            echo 'Last Generate: ';
+                            echo '<span class="label label-info">';
+                            echo MyFungsi::bulan($x->month);
+                            echo '</span>'; 
+                          }
+                        ?>
+                      <?php endif; ?>
+	                	<?php endforeach; ?>
+	                </td>
+	                <td class="span2"><a class="label label-info" href="<?php echo URL::to('schedule/create'); ?>?id=<?php echo $group->id; ?>"> Create Jadwal </a></td>
+            	</tr>
+            	<?php endforeach; ?><?php else: ?>
+
+            	<tr> <td> Tidak ada armada di master kepang ini </td> </tr>
+
+            	<?php endif; ?>
+
+            </table>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
+
+ <div class="modal hide fade" id="delete_group">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Are You Sure?</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this group?</p>
+      </div>
+      <div class="modal-footer">
+        <?php echo  Form::open('schedule/delgroup', 'POST') ; ?>
+        <a data-toggle="modal" href="#delete_group" class="btn">Keep</a>
+        <input type="hidden" name="id" id="postvalue" value="" />
+        <input type="submit" class="btn btn-danger" value="Delete" />
+        <?php echo  Form::close() ; ?>
+      </div>
+    </div>
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+  <script type="text/javascript">
+       
+
+        // Populate the field with the right data for the modal when clicked
+        $('.delete_toggler').each(function(index,elem) {
+            $(elem).click(function(){
+                $('#postvalue').attr('value',$(elem).attr('rel'));
+                $('#delete_group').modal('show');
+            });
+        });
+ 
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

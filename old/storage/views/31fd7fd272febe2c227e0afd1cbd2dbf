@@ -1,0 +1,24 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Pemberdayaan Pengemudi</h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('pemberdayaan'); ?>">Pemberdayaan Pengemudi</a> <span class="divider">/</span></li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+<?php \Laravel\Section::start('content'); ?>
+
+
+
+<?php \Laravel\Section::stop(); ?>
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

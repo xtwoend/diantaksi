@@ -1,0 +1,41 @@
+<?php \Laravel\Section::start('script'); ?>
+	<div id="embed"></div>
+<?php //  ===== Javascript ===== --}} ?>	<?php //  Untuk Chat Room --}} ?>	<?php if(!Auth::guest()): ?>
+	<script>
+
+		var working = false;
+		$('#chat').live('click', function() {
+        	//alert('Doing Someting');
+        	chatyuk();
+        	return false;
+      	});
+
+		function chatyuk()
+		{
+			var url = 'http://118.91.130.222/chat/php/ajax.php?action=login&name=<?php echo  Auth::user()->username ; ?>';
+          	var thePopup = window.open( url, "Chat Bareng", "menubar=0,location=0,height=540,width=530" );
+		}
+
+	</script>
+	<?php endif; ?>
+
+	<?php //  Scripts concatenated and minified --}} ?>	<?php \Laravel\Section::start('more_scripts'); ?>
+
+		<?php foreach ( Config::get('template.other_scripts') as $script ): ?>
+			<?php echo  HTML::script($script) ; ?>
+		<?php endforeach; ?>
+
+		<?php echo \Laravel\Section::yield('custom_scripts'); ?>
+
+	<?php echo \Laravel\Section::yield_section(); ?>
+	<?php //  End scripts --}} ?>
+	<?php //  Asynchronous Google Analytics --}} ?>	<?php if ( Config::get('template.analytics_on') ): ?>
+	  <script>
+	    var _gaq=[['_setAccount','<?php echo  Config::get("template.analytics_id") ; ?>'],['_trackPageview']];
+	    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	    s.parentNode.insertBefore(g,s)}(document,'script'));
+	  </script>
+	<?php endif; ?>
+	
+<?php echo \Laravel\Section::yield_section(); ?>

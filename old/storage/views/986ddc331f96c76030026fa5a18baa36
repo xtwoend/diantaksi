@@ -1,0 +1,76 @@
+<?php \Laravel\Section::start('body'); ?>
+
+	<?php //  Main section --}} ?><?php \Laravel\Section::start('main'); ?>
+
+		<?php \Laravel\Section::start('navbar'); ?>
+			<?php echo view('themes.partials.navbar')->with(get_defined_vars())->render(); ?>
+		<?php echo \Laravel\Section::yield_section(); ?>
+
+<?php if(!Auth::guest()): ?>
+		<?php \Laravel\Section::start('sidebar'); ?>
+			<?php echo view('themes.partials.sidebar')->with(get_defined_vars())->render(); ?>
+		<?php echo \Laravel\Section::yield_section(); ?>
+
+		<div class="content">
+            <br><br>
+					<?php echo \Laravel\Section::yield('header'); ?>
+			 <div class="container-fluid">
+    			<div class="row-fluid">
+					<?php echo \Laravel\Section::yield('content'); ?>
+					<?php \Laravel\Section::start('footer'); ?>
+							<?php echo view('themes.partials.footer')->with(get_defined_vars())->render(); ?>
+					<?php echo \Laravel\Section::yield_section(); ?>
+				</div>
+			</div>
+            <?php \Laravel\Section::start('notes'); ?>
+                            <?php echo view('themes.partials.notes')->with(get_defined_vars())->render(); ?>
+            <?php echo \Laravel\Section::yield_section(); ?>
+		</div>	
+<?php else: ?>
+		<?php echo \Laravel\Section::yield('content'); ?>
+<?php endif; ?>
+				
+	<?php echo \Laravel\Section::yield_section(); ?>
+	<?php //  Main section --}} ?>
+	<?php //  The Tail --}} ?>		<?php \Laravel\Section::start('script'); ?>
+			<?php echo view('themes.partials.script')->with(get_defined_vars())->render(); ?>
+		<?php echo \Laravel\Section::yield_section(); ?>
+
+		<?php echo \Laravel\Section::yield('otherscript'); ?>
+	<?php //  tail include javascript files --}} ?><script type="text/javascript">
+    
+    date_time('date_time');
+    
+    function date_time(id)
+    {
+            date = new Date;
+            year = date.getFullYear();
+            month = date.getMonth();
+            months = new Array('Januari', 'Febuari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+            d = date.getDate();
+            day = date.getDay();
+            days = new Array('Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu');
+            h = date.getHours();
+            if(h<10)
+            {
+                    h = "0"+h;
+            }
+            m = date.getMinutes();
+            if(m<10)
+            {
+                    m = "0"+m;
+            }
+            s = date.getSeconds();
+            if(s<10)
+            {
+                    s = "0"+s;
+            }
+            //result = ''+days[day]+', '+d+' '+months[month]+' '+year+' '+h+':'+m+':'+s;
+            result = d+' '+months[month]+' '+year+' '+h+':'+m+':'+s;
+            document.getElementById(id).innerHTML = result;
+            setTimeout('date_time("'+id+'");','1000');
+            return true;
+    }
+    </script>
+	
+<?php echo \Laravel\Section::yield_section(); ?>

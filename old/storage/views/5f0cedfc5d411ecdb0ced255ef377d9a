@@ -1,0 +1,18 @@
+
+<?php \Laravel\Section::start('header'); ?>
+	<div class="header">
+   			<h1 class="page-title">Dashboard</h1>
+    </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="">Home</a> <span class="divider">/</span></li>
+        <li class="active">Dashboard</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('content'); ?>
+	 
+   	
+
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

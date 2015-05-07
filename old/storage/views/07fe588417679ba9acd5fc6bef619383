@@ -1,0 +1,88 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Setoran Armada</h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('ksos'); ?>">Management KSO</a> <span class="divider">/</span></li>
+        <li class="active">KSO</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+<?php \Laravel\Section::start('content'); ?>
+
+ <div class="block">
+        <div class="block-heading">
+        	<span class="block-icon pull-right">
+        		<?php echo  HTML::link('ksos/formkso','New KSO',array('class'=>'btn btn-info','type'=>'button') ) ; ?>
+            </span>
+            <a href="#widgetGroup1" data-toggle="collapse">Daftar Armada Perserta KSO</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+          	
+        	<table class="table">
+        		<?php foreach(Pool::all() as $pool): ?>
+        		<tr>
+        			<td> <?php echo $pool->pool_name; ?> </td>
+        		</tr>
+        		<tr>
+        			<td>  
+                        <table class="table">
+                            <tr>
+                                <td><span class="label label-success">KSO AKTIF</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <?php $ksos = Fleet::join('ksos', 'fleets.id', '=', 'ksos.fleet_id')->where('ksos.actived','=', 1)->where('ksos.pool_id', '=', $pool->id )->order_by('fleets.taxi_number','asc')->get(array('ksos.id','fleets.taxi_number', 'fleets.id as fleet_id')); ?>
+                                    <?php foreach($ksos as $kso): ?>
+                                        <?php echo  HTML::link('ksos/ksofleet/'.$kso->fleet_id ,$kso->taxi_number,array('class'=>'btn btn-mini btn-success')) ; ?>
+                                    <?php endforeach; ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="label label-important">KSO GUGUR</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                               <?php $ksos = Fleet::join('ksos', 'fleets.id', '=', 'ksos.fleet_id')->where('ksos.actived','=',2)->where('ksos.pool_id', '=', $pool->id )->group_by('fleets.id')->order_by('fleets.taxi_number','asc')->get(array('ksos.id','fleets.taxi_number', 'fleets.id as fleet_id')); ?>
+                                <?php foreach($ksos as $kso): ?>
+                                    <?php //membuat yang aktif tidak ada tapi yang gugur ada
+                                      $active = Kso::where('fleet_id','=',$kso->fleet_id)->where('actived','=',1)->get();
+                                    ?>
+                                    <?php if(!$active): ?>
+                                        <?php echo  HTML::link('ksos/ksofleet/'.$kso->fleet_id ,$kso->taxi_number,array('class'=>'btn btn-mini btn-success')) ; ?>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label label-important">KSO SELESAI</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                               <?php $ksos = Fleet::join('ksos', 'fleets.id', '=', 'ksos.fleet_id')->where('ksos.actived','=',3)->where('ksos.pool_id', '=', $pool->id )->group_by('fleets.id')->order_by('fleets.taxi_number','asc')->get(array('ksos.id','fleets.taxi_number', 'fleets.id as fleet_id')); ?>
+                                <?php foreach($ksos as $kso): ?>
+                                    <?php echo  HTML::link('ksos/ksofleet/'.$kso->fleet_id ,$kso->taxi_number,array('class'=>'btn btn-mini btn-success')) ; ?>
+                                <?php endforeach; ?>
+                                </td>
+                            </tr>
+                        </table>
+        			</td>
+        		</tr>
+        		<?php endforeach; ?>
+        	</table>
+
+        </div>
+    </div>
+
+<?php \Laravel\Section::stop(); ?>
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

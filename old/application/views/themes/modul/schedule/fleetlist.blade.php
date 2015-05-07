@@ -1,0 +1,1 @@
+{{ Form::select('fleets[]', $fleets, '', array('required')) }}

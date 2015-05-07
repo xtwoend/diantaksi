@@ -1,0 +1,51 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Permintaan Barang</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('werehouses'); ?>">Warehouse</a> <span class="divider">/</span></li>
+        <li class="active">permintaan barang</a></li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+  
+<?php \Laravel\Section::start('content'); ?><div class="row-fluid">
+    <div class="block span8">
+        <a href="#tablewidget" class="block-heading" data-toggle="collapse">Permintaan Sparepart dari WO</a>
+        <div id="tablewidget" class="block-body collapse in">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nomor WO</th>
+                  <th>Body</th>
+                  <th>Tanggal</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($wos  as $wo): ?>
+                <tr>
+                  <td><?php echo  HTML::link('warehouses/approvedpartdetail/'.$wo->id, $wo->wo_number) ; ?></td>
+                  <td><?php echo  Fleet::find($wo->fleet_id)->taxi_number ; ?></td>
+                  <td><?php echo  $wo->inserted_date_set ; ?></td>
+                  <td><?php echo  Statusperbaikan::find($wo->status)->status ; ?></td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+            <!--<p><a href="#">More...</a></p>-->
+        </div>
+    </div>
+    
+</div>  
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

@@ -1,0 +1,41 @@
+
+<?php \Laravel\Section::start('header'); ?>
+	<div class="header">
+   			<h1 class="page-title">Upload Setoran</h1>
+    </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="">Home</a> <span class="divider">/</span></li>
+        <li class="active">Upload Setoran</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('content'); ?>
+  <div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Form Upload Setoran</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+          <br>
+          <?php echo  Form::open_for_files(URL::current()) ; ?>
+              <div class="input-append" >
+                  <?php echo  Form::file('datasetoran') ; ?>   
+              </div>
+              <button class="btn btn-info">Upload Data</button>
+            </form>
+            <br> 
+        </div>
+    </div> 
+    
+    
+<?php \Laravel\Section::stop(); ?>
+
+
+<?php \Laravel\Section::start('otherscript'); ?> 	
+   <script type="text/javascript">
+
+  
+
+</script>
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

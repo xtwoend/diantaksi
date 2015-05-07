@@ -1,0 +1,43 @@
+<?php
+
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="daftarksoactive.xls"');
+header('Cache-Control: max-age=0');
+
+?>
+
+
+<table>
+	<tr>
+		<th>No</th>
+		<th>Body</th>
+		<th>Tanggal KSO</th>
+		<th>Tanggal Selesai KSO</th>
+		<th>Nip</th>
+		<th>Bravo</th>
+		<th>Tanggal Lahir</th>		
+		<th>Alamat</th>
+		<th>Kelurahan</th>
+		<th>Kecamatan</th>
+		<th>Kota</th>
+		<th>No Telp</th>
+	</tr>
+
+	<?php $no=1; ?>
+	<?php foreach($ksos as $kso): ?>
+	<tr>
+		<td><?php echo  $no++ ; ?></td>
+		<td><?php echo  $kso->taxi_number ; ?></td>
+		<td><?php echo  $kso->ops_start; ?></td>
+		<td><?php echo  $kso->ops_end; ?></td>
+		<td><?php echo  $kso->nip ; ?></td>	
+		<td><?php echo  $kso->name ; ?></td>
+		<td><?php echo  $kso->date_of_birth ; ?></td>
+		<td><?php echo  $kso->address ; ?></td>
+		<td><?php echo  $kso->kelurahan ; ?></td>
+		<td><?php echo  $kso->kecamatan ; ?></td>
+		<td><?php echo  $kso->kota ; ?></td>
+		<td><?php echo  $kso->phone ; ?></td>
+	</tr>
+	<?php endforeach; ?>
+</table>

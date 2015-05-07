@@ -1,0 +1,46 @@
+<div class="navbar">
+    <div class="navbar-shadow">
+        <div class="navbar-inner">
+
+            <?php if(!Auth::guest()): ?>
+            <a class="changtogle brand" href="#"><span class="second"><i class="icon-th-list"></i></span></a>
+                <ul class="nav pull-right">
+                    <li id="fat-menu" class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i> <?php echo  $user->fullname ; ?> in <?php echo   Pool::find($user->pool_id)->pool_name ; ?> 
+                            <i class="icon-caret-down"></i>
+                        </a>
+                        
+                        <ul class="dropdown-menu">
+                            <li><?php echo  HTML::link('users/changepassword', 'Change Password'); ; ?></li>
+                            <li><?php echo  HTML::link('admin/logout', 'Logout'); ; ?></li>
+                        </ul>
+                    </li>       
+                </ul>
+            <?php endif; ?>
+            <a class="brand" href="#"><span class="first">Operasi</span> <span class="second">Program</span></a>
+        </div>
+        </div>
+         <?php if(!Auth::guest()): ?>
+            <span class="notes-navbar">
+                <?php //  Pesan Broadcast --}} ?>                <?php 
+                    $news = News::where('msg_type','=',1)->where('expired','>',date('Y-m-d H:i:s'))->get(); 
+                    $msgforpool = News::where('msg_type','=',2)->where('expired','>',date('Y-m-d H:i:s'))->where('pool_id','=',Auth::user()->pool_id)->get();
+                    $msgforuser = News::where('msg_type','=',3)->where('expired','>',date('Y-m-d H:i:s'))->where('to_user_id','=',Auth::user()->id)->get();
+                ?> 
+                
+                <ul id="ticker01">
+                    <?php foreach($msgforuser as $msguser): ?>
+                        <li><span class="label <?php echo  $msguser->priority ; ?>"><?php echo  $msguser->created_at ; ?></span><span class="label">To: <?php echo  User::find($msguser->to_user_id)->fullname ; ?> </span> <a href="<?php echo   URL::to('news/message') ; ?>"><?php echo  Str::limit($msguser->message,100) ; ?></a></li>
+                    <?php endforeach; ?>
+                    <?php foreach($msgforpool as $msgpool): ?>
+                        <li><span class="label <?php echo  $msgpool->priority ; ?>"><?php echo  $msgpool->created_at ; ?></span><span class="label">To: <?php echo  Pool::find($msgpool->pool_id)->pool_name ; ?> </span><a href="<?php echo   URL::to('news/message') ; ?>"><?php echo  Str::limit($msgpool->message,100) ; ?></a></li>
+                    <?php endforeach; ?>
+                    <?php foreach($news as $new): ?>
+                        <li><span class="label <?php echo  $new->priority ; ?>"><?php echo  $new->created_at ; ?></span><a href="<?php echo   URL::to('news/message') ; ?>"><?php echo  Str::limit($new->message,100) ; ?></a></li>
+                    <?php endforeach; ?>
+
+                </ul>
+            </span>
+             <?php endif; ?>
+</div>

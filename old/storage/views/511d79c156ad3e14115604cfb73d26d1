@@ -1,0 +1,246 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Kartu Kontrol Armada Selesai KSO</h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li class="active">Kartu Kontrol Armada Selesai KSO</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+ 
+<?php \Laravel\Section::start('content'); ?>
+
+<div class="row-fluid">
+  <div class="span3">
+    <div class="block">
+        <span class="block-heading">
+          <a>
+            <div class="input-append">
+              <input class="span9" id="searchKey" type="text">
+              <button class="btn" id="btnSearch" type="button"><i class="icon-search"></i></button>
+            </div> 
+          </a>
+        </span>
+        <div class="block-body collapse in" id="widget-listArmada">
+            <div class="leftArea">
+              <ul id="driverLists" class="nav nav-list"></ul>
+            </div>
+        </div>
+    </div>
+
+  </div>
+  <div class="span9">
+    <div class="block">
+        <div class="block-heading">
+            <span class="block-icon pull-right">
+              <button class="btn btn-primary" type="button" id="reportks">Detail Setoran</button>
+            </span>
+            <a href="#widget-info" data-toggle="collapse">Information </a>
+        </div>
+        <div class="block-body collapse in" id="widget-info">
+          
+          <div class="row-fluid">
+          <div class="tabbable">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab3" data-toggle="tab">Armada</a></li>
+              <li><a href="#tab4" data-toggle="tab">DP Armada</a></li>
+            </ul>
+            <div class="tab-content">
+                
+                <?php //  end status bap --}} ?>                <div class="tab-pane active" id="tab3">
+                  <table class="table table-condensed table-striped">
+                  <tr>
+                    <td>Nomor Body</td>
+                    <td><input type="hidden" id="kso_id" name="kso_id"><input type="text" id="taxi_number" name="taxi_number" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Bravo</td>
+                    <td><input type="text" id="bravo" name="bravo" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Nomor Polisi</td>
+                    <td><input type="text" id="police_number" name="police_number" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Total KS</td>
+                    <td><input type="text" id="total_ks" name="total_ks" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Pembayaran KS</td>
+                    <td><input type="text" id="pembayaran_ks" name="pembayaran_ks" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Tabungan Sparepart</td>
+                    <td><input type="text" id="tab_sparepart" name="tab_sparepart" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Pemakaian Sparepart</td>
+                    <td><input type="text" id="pem_sparepart" name="pem_sparepart" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Pembayaran Sparepart</td>
+                    <td><input type="text" id="pembayaran_sparepart" name="pembayaran_sparepart" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Saldo Unit</td>
+                    <td><input type="text" id="saldo_unit" name="saldo_unit" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td><input type="text" id="fleet_status" name="fleet_status" disabled></td>
+                  </tr>
+               </table>
+                </div>
+                
+
+                 <div class="tab-pane" id="tab4">
+                  <table class="table table-condensed table-striped">
+                  <tr>
+                    <td>DP KSO</td>
+                    <td><input type="text" id="dp_kso" name="dp_kso" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Hutang DP KSO</td>
+                    <td><input type="text" id="hutang_dp_kso" name="hutang_dp_kso" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Pembayaran DP KSO</td>
+                    <td><input type="text" id="pem_hutang_dp_kso" name="pem_hutang_dp_kso" class="money" disabled></td>
+                  </tr>
+                  <tr>
+                    <td>Saldo DP KSO</td>
+                    <td><input type="text" id="saldo_dp" name="saldo_dp" class="money" disabled></td>
+                  </tr>
+                 
+               </table>
+                </div>
+              
+                <?php // end informasi pengemudi--}} ?>            </div>
+          
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+<?php //  Modal Proses APP --}} ?>
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+var rootURL = '<?php echo  URL::base().'/cardcontrols' ; ?>';
+var currentInfo;
+$(function () {
+        $('.money').money_field({width: 120});
+});
+
+      findAll($('#date').val());
+
+      $('#btnSearch').click(function() {
+        search($('#searchKey').val());
+        return false;
+      });
+
+      $('#driverLists a').live('click', function() {
+        findById($(this).data('identity'));
+      });     
+
+      $('#reportks').click(function(){
+        var kso_id = $('#kso_id').val();
+        //$('#reportks').load(rootURL + '/kartukontrolpengemudi/' + driver_id );
+        if(kso_id == ''){
+          alert('pilih Armada dahulu');
+        }else{
+          var url = rootURL + '/kartukontrolarmadakso/' + kso_id;
+          window.open( url, "Kartu Kontrol Armada", "menubar=0,location=0,height=700,width=1100" );
+        }
+        return false;
+
+      });
+
+
+      function search(searchKey) {
+        if (searchKey == '') 
+          findAll($('#date').val());
+        else
+          findByName(searchKey);
+      }
+
+      function findAll(dateSchedule) {
+        console.log('findAll');
+        $.ajax({
+          type: 'GET',
+          url: rootURL + '/ksolist',
+          dataType: "json", // data type of response
+          success: renderList
+        });
+      }
+      function findByName(searchKey) {
+
+        var dataJSON = JSON.stringify({
+          "taxi_number": searchKey,
+          });
+
+        console.log('findByName: ' + searchKey);
+        $.ajax({
+          type: 'POST',
+          contentType: 'application/json',
+          url: rootURL + '/searchFleetkso',
+          dataType: "json",
+          data: dataJSON,
+          success: renderList 
+        });
+      }
+
+      function findById(id) {
+        console.log('findById: ' + id);
+        $.ajax({
+          type: 'GET',
+          url: rootURL + '/findbyIdFleetkso/' + id,
+          dataType: "json",
+          success: function(data){
+            
+            var fleetinfo = data.fleetinfo;
+            console.log('findById success: ' + fleetinfo.taxi_number);
+            currentInfo = data;
+            renderDetails(currentInfo);
+          }
+        });
+      }
+
+      function renderList(data) {
+        // JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
+        var list = data == null ? [] : (data.fleets instanceof Array ? data.fleets : [data.fleets]);
+        $('#driverLists li').remove();
+        $.each(list, function(index, fleet) {
+          $('#driverLists').append('<li><a href="#" data-identity="' + fleet.id + '">'+fleet.taxi_number+' ( ' + fleet.kso_number+ ' ) '+'</a></li>');
+        });
+      }
+
+      function renderDetails(data) {
+        var fleetinfo = data.fleetinfo;
+        //fleet info
+        $('#kso_id').val(fleetinfo.id);
+        $('#taxi_number').val(fleetinfo.taxi_number);
+        $('#bravo').val(fleetinfo.bravo);
+        $('#police_number').val(fleetinfo.police_number);
+        $('#total_ks').val(fleetinfo.total_ks);
+        $('#pembayaran_ks').val(fleetinfo.pembayaran_ks);
+        $('#tab_sparepart').val(fleetinfo.tab_sparepart);
+        $('#pem_sparepart').val(fleetinfo.pem_sparepart);
+        $('#fleet_status').val(fleetinfo.status);
+        $('#saldo_unit').val(fleetinfo.saldo_unit);
+        $('#pembayaran_sparepart').val(fleetinfo.pembayaran_sparepart);
+        $('#dp_kso').val(fleetinfo.dp_kso);
+        $('#hutang_dp_kso').val(fleetinfo.hutang_dp_kso);
+        $('#pem_hutang_dp_kso').val(fleetinfo.pem_hutang_dp_kso);
+        $('#saldo_dp').val(fleetinfo.saldo_dp);
+
+        return false;
+      }
+</script>
+  
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

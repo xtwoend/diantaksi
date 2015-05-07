@@ -1,0 +1,47 @@
+
+<?php \Laravel\Section::start('header'); ?>
+    <div class="header">
+          <h1 class="page-title">DATA KINERJA ANAK ASUH</h1>
+    </div>    
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li class="active">Data kinerja anak asuh</a> 
+    </ul>
+
+<?php \Laravel\Section::stop(); ?>
+  
+  
+<?php \Laravel\Section::start('content'); ?>
+
+<div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Tanggal Periode</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+         <br>
+              <form method="POST" class="form-inline">
+                <?php echo  Form::select('bapak_asuh', $bapak_asuh , null, array('class'=>'form-controll')) ; ?>
+                <div class="input-append date" id="datepicker" data-date="<?php echo  date('Y-m-d') ; ?>" data-date-format="yyyy-mm-dd">
+                      <input name="date" id="date" class="input-small" id="tanggal" type="text" value="<?php echo  date('Y-m-d') ; ?>">
+                      <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+                  <button type="submit" class="btn btn-info" id="downloadReport"><i class="icon-download"></i> Download</button>
+              </form>
+          <br>
+        </div>
+</div>
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+    $(function(){
+        $('#datepicker').datepicker({
+              format: 'yyyy-mm-dd',
+              viewMode: "months", 
+              minViewMode: "months"
+        });
+    });
+</script>
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

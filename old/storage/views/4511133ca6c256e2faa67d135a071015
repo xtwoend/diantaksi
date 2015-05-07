@@ -1,0 +1,58 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Manage Bapak Asuh <?php echo   Pool::find($user->pool_id)->pool_name ; ?> </h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="">Home</a> <span class="divider">/</span></li>
+        <li class="active">Manage Bapak Asuh</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+
+<?php \Laravel\Section::start('content'); ?>
+     
+     <table class="table table-striped table-bordered table-condensed">
+        <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Jabatan</th>
+                  <th>Anak Asuh</th>
+                  <th>Actions</th>
+                </tr>
+        </thead>
+        <tbody>
+          <?php $no = 1; ?>
+<?php foreach($userperpool as $man): ?>
+          <tr>
+            <td><?php echo  $no ; ?></td>
+            <td><?php echo  $man->fullname ; ?></td>
+            <td> - </td>
+            <td>
+                <?php 
+                        $anakasuh = Anakasuh::join('fleets', 'fleets.id', '=', 'anak_asuh.fleet_id')
+                                  ->where('anak_asuh.user_id','=',$man->id)
+                                  ->where('anak_asuh.status', '=', 1 )
+                                  ->get(array('anak_asuh.id','fleets.taxi_number', 'anak_asuh.fleet_id')); 
+                ?>
+                                    <?php foreach($anakasuh as $fleet): ?>
+                                        <?php echo  HTML::link('cardcontrols/kartukontrolarmada/'.$fleet->fleet_id ,$fleet->taxi_number,array('class'=>'btn btn-mini btn-success','target'=>'_blank')) ; ?>
+                                    <?php endforeach; ?>
+            
+            </td>
+            <td><?php echo  HTML::link('anakasuh/daftar/'.$man->id ,'Manage Anak Asuh',array('class'=>'btn btn-mini btn-success')) ; ?></td>
+          </tr>
+          <?php $no++; ?>
+<?php endforeach; ?> 
+        </tbody>
+      </table>
+      <!-- Button to trigger modal -->
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

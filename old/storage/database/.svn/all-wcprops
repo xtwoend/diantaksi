@@ -1,0 +1,179 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/operasi/!svn/ver/578/storage/database
+END
+report_selisi.sql
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/operasi/!svn/ver/334/storage/database/report_selisi.sql
+END
+report_newkas.sql
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/operasi/!svn/ver/578/storage/database/report_newkas.sql
+END
+message.sql
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/operasi/!svn/ver/400/storage/database/message.sql
+END
+summary_bydate.sql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/operasi/!svn/ver/163/storage/database/summary_bydate.sql
+END
+monthly_report.sql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/operasi/!svn/ver/261/storage/database/monthly_report.sql
+END
+finan_summary_modif.sql
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/operasi/!svn/ver/236/storage/database/finan_summary_modif.sql
+END
+driverdiana.sql
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/operasi/!svn/ver/163/storage/database/driverdiana.sql
+END
+wo_stock.sql
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/operasi/!svn/ver/476/storage/database/wo_stock.sql
+END
+report_detail_ks_graf.sql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/operasi/!svn/ver/329/storage/database/report_detail_ks_graf.sql
+END
+viewfinancialsedit16052013.sql
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/operasi/!svn/ver/169/storage/database/viewfinancialsedit16052013.sql
+END
+refisi_bapak_asuh_report.sql
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/operasi/!svn/ver/444/storage/database/refisi_bapak_asuh_report.sql
+END
+update-sumarry-report.sql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/operasi/!svn/ver/269/storage/database/update-sumarry-report.sql
+END
+financial_report_summary_graf.sql
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/operasi/!svn/ver/270/storage/database/financial_report_summary_graf.sql
+END
+reportdaily.sql
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/operasi/!svn/ver/269/storage/database/reportdaily.sql
+END
+bapak_asuh.sql
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/operasi/!svn/ver/353/storage/database/bapak_asuh.sql
+END
+bapakasuh.sql
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/operasi/!svn/ver/230/storage/database/bapakasuh.sql
+END
+summary_grafupdate.sql
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/operasi/!svn/ver/576/storage/database/summary_grafupdate.sql
+END
+jabatan.sql
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/operasi/!svn/ver/329/storage/database/jabatan.sql
+END
+bapaks.sql
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/operasi/!svn/ver/353/storage/database/bapaks.sql
+END
+sparepart.sql
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/operasi/!svn/ver/230/storage/database/sparepart.sql
+END
+reportdaily-addshiftjoin.sql
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/operasi/!svn/ver/275/storage/database/reportdaily-addshiftjoin.sql
+END
+trigger_stock.sql
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/operasi/!svn/ver/576/storage/database/trigger_stock.sql
+END
+wo_partlist.sql
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/operasi/!svn/ver/444/storage/database/wo_partlist.sql
+END
+sss.sql
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/operasi/!svn/ver/353/storage/database/sss.sql
+END
+revisitabelviewfinancial.sql
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/operasi/!svn/ver/163/storage/database/revisitabelviewfinancial.sql
+END
+add_otoritas.sql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/operasi/!svn/ver/444/storage/database/add_otoritas.sql
+END
+view_stock.sql
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/operasi/!svn/ver/576/storage/database/view_stock.sql
+END
+pp.sql
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/operasi/!svn/ver/251/storage/database/pp.sql
+END
+fleetsdiana.sql
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/operasi/!svn/ver/163/storage/database/fleetsdiana.sql
+END

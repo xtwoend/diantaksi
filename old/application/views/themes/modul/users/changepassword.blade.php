@@ -1,0 +1,48 @@
+@layout('themes.layouts.common')
+
+@section('header')
+  <div class="header">
+        <h1 class="page-title">Users</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+        <li class="active">Users</li>
+    </ul>
+@endsection
+  
+
+@section('content')
+       
+          
+          <?php echo Messages::get_html()?>
+          <?php echo Form::open(); ?>
+          
+          <fieldset>
+            <legend>Authentication</legend>
+            <div class="control-group">
+              <?php echo Form::label('password', 'Password',array('class'=>'control-label'))?>
+              <div class="controls">
+                <?php echo Form::password('password', array('placeholder'=>'Enter New Password...'))?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo Form::label('password_confirmation', 'Password Confirmation', array('class'=>'control-label'))?>
+              <div class="controls">
+                <?php echo Form::password('password_confirmation', array('placeholder'=>'Confirm New Password...'))?>
+              </div>
+            </div>
+
+          </fieldset>
+
+          
+          <div class="form-actions">
+            
+            <input type="submit" class="btn btn-primary" value="Change" />
+          </div>
+          <?php echo Form::close() ?>
+          
+@endsection
+
+   
+  

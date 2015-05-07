@@ -1,0 +1,222 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Daftar Pengemudi</h1>
+  </div>
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('drivers'); ?>">Driver CMS</a> <span class="divider">/</span></li>
+        <li class="active">Add Pengemudi</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+  
+<?php \Laravel\Section::start('content'); ?>
+
+<div class="block">
+        <div class="block-heading">
+            <a href="#widgetGroup1" data-toggle="collapse">Form Pengemudi</a>       
+        </div>
+        <div class="block-body collapse in" id="widgetGroup1">
+            <br>
+          <div class="row-fluid"> <!-- Start pembagian kolom -->
+             <div class="span8">
+                <form class="form-horizontal" action="<?php echo  URL::current() ; ?>" method="POST" enctype="multipart/form-data">
+                  <div class="control-group">
+                    <label class="control-label" for="name">Nip</label>
+                    <div class="controls">
+                      <input type="text" id="nip" name="nip" placeholder="Ketikan No NIp" <?php if(!$create): ?> value="<?php echo $driver->nip; ?>" <?php endif; ?>>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="name">Nama Lengkap</label>
+                    <div class="controls">
+                      <input type="text" id="name" name="name" placeholder="Nama" <?php if(!$create): ?> value="<?php echo $driver->name; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="inputtext">TTL</label>
+                    <div class="controls">
+                      <input type="text" id="brith_place" name="brith_place" placeholder="Tempat Lahir" <?php if(!$create): ?> value="<?php echo $driver->brith_place; ?>" <?php endif; ?> >
+                      <div class="input-append date" id="datepicker" data-date="<?php echo  date('Y-m-d') ; ?>" data-date-format="yyyy-mm-dd">
+                        <input name="date_of_birth" class="input-small" id="date_of_birth" type="text" <?php if(!$create): ?> value="<?php echo $driver->date_of_birth; ?>" <?php endif; ?>>
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Tanggal Berlaku KPP</label>
+                    <div class="controls">
+                      <div class="input-append date" id="kpp_validthrough" data-date="<?php echo  date('Y-m-d') ; ?>" data-date-format="yyyy-mm-dd">
+                        <input name="kpp_validthrough" class="input-small" id="kpp_validthrough" type="text" <?php if(!$create): ?> value="<?php echo $driver->kpp_validthrough; ?>" <?php endif; ?>>
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">No KTP</label>
+                    <div class="controls">
+                      <input type="text" id="ktp" name="ktp" placeholder="ktp..." <?php if(!$create): ?> value="<?php echo $driver->ktp; ?>" <?php else: ?> <?php endif; ?> >
+                    </div>
+                  </div>
+
+                   <div class="control-group">
+                    <label class="control-label" for="pool">No SIM</label>
+                    <div class="controls">
+                      <input type="text" id="sim" name="sim" placeholder="sim..." <?php if(!$create): ?> value="<?php echo $driver->sim; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="phone">No Telp / HP</label>
+                    <div class="controls">
+                      <input type="text" id="phone" name="phone" placeholder="phone..." <?php if(!$create): ?> value="<?php echo $driver->phone; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Pool</label>
+                    <div class="controls">
+                        <?php echo  Form::select('pool_id', $pools , ($create) ? '': $driver->pool_id ) ; ?>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Alamat</label>
+                    <div class="controls">
+                        <textarea rows="5" id="address" name="address" > <?php if(!$create): ?> <?php echo $driver->address; ?> <?php endif; ?> </textarea>
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label" for="phone">Kelurahan</label>
+                    <div class="controls">
+                      <input type="text" id="kelurahan" name="kelurahan" placeholder="kelurahan..." <?php if(!$create): ?> value="<?php echo $driver->kelurahan; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label" for="kecamatan">Kecamatan</label>
+                    <div class="controls">
+                      <input type="text" id="kecamatan" name="kecamatan" placeholder="kecamatan..." <?php if(!$create): ?> value="<?php echo $driver->kecamatan; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="kota">Kota</label>
+                    <div class="controls">
+                      <input type="text" id="kota" name="kota" placeholder="kota..." <?php if(!$create): ?> value="<?php echo $driver->kota; ?>" <?php endif; ?> >
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Area Operasi</label>
+                    <div class="controls">
+                        <?php echo  Form::select('city_id', $cities, ($create) ? '': $driver->city_id  ) ; ?>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Block Pengemudi</label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('fg_blocked', '1', ($create) ? '' : ($driver->fg_blocked == 1) ? true : false ) ; ?>
+                          
+                      </label>
+                  </div>
+
+                  <div class="control-group">
+                    <label class="control-label" for="pool">Pengemudi Aktif</label>
+                      <label class="checkbox inline span4">
+                          <?php echo  Form::checkbox('driver_status', '1', ($create) ? '' : ($driver->driver_status == 1) ? true : false ) ; ?>
+                          
+                      </label>
+                  </div>
+                  
+              </div>
+              <div class="span4">
+                  <div class="block">
+                      <div class="block-heading">
+                          <a>Foto Pengemudi</a>       
+                      </div>
+                      <div class="block-body collapse in">
+                        <?php if(!$create): ?> 
+                          <?php if( $driver->photo !== null ): ?> 
+                            <?php echo  HTML::image('photo/'. $driver->photo) ; ?>
+                          <?php endif; ?>
+                        <?php endif; ?>
+                      </div>
+                  </div>
+                  <!--
+                  <video autoplay></video>
+                  <img src="">
+                  <canvas style="display:none;"></canvas>
+                  -->
+                  <div class="control-group">
+                    <label class="control-label" for="kecamatan">Upload Foto</label>
+                    <div class="controls">
+                        <?php echo  Form::file('photo') ; ?>
+                    </div>
+                  </div>
+                  <input type="reset" class="btn" value="Reset"> <input type="submit" class="btn btn-primary" value="Simpan"> 
+                  </form>
+                  <br>
+                  <br>
+                  <br>
+                  <button class="btn btn-warning" id="CetakKpp">Cetak KPP</button>
+              </div>
+
+            </div>  <!-- end pembagian kolom -->
+           
+        </div>
+</div>
+<div id="formkpp"></div>
+
+<?php \Laravel\Section::stop(); ?>
+<?php \Laravel\Section::start('otherscript'); ?>
+<script type="text/javascript">
+var rootURL = '<?php echo  URL::base().'/drivers' ; ?>';
+var driver_id = '<?php echo  $driver_id ; ?>';
+$(function () {
+        $('#datepicker').datepicker({
+              format: 'yyyy-mm-dd'
+          });
+        $('#kpp_validthrough').datepicker({
+              format: 'yyyy-mm-dd'
+          });
+           
+  });
+
+$('#CetakKpp').click(function() {
+    $('#formkpp').load(rootURL + '/printkpp/' + driver_id );
+    return false;
+  });
+/*
+var video = document.querySelector('video');
+var canvas = document.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    var localMediaStream = null;
+
+    var onCameraFail = function (e) {
+        console.log('Camera did not work.', e);
+    };
+
+    function snapshot() {
+        if (localMediaStream) {
+            ctx.drawImage(video, 0, 0);
+        }
+    }
+
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    window.URL = window.URL || window.webkitURL;
+    navigator.getUserMedia({video:true}, function (stream) {
+        video.src = window.URL.createObjectURL(stream);
+        localMediaStream = stream;
+    }, onCameraFail);
+*/
+</script>
+<?php \Laravel\Section::stop(); ?>
+
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>

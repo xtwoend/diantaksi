@@ -1,0 +1,42 @@
+
+<?php \Laravel\Section::start('header'); ?>
+  <div class="header">
+        <h1 class="page-title">Create Schedule</h1>
+  </div>
+        
+    <ul class="breadcrumb">
+        <li><a href="<?php echo URL::to('admin/dashboard'); ?>">Home</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('schedule'); ?>">Schedule</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo URL::to('schedule/groups'); ?>">Groups</a> <span class="divider">/</span></li>
+        <li class="active">Create Schedule</li>
+    </ul>
+<?php \Laravel\Section::stop(); ?>
+ 
+<?php \Laravel\Section::start('content'); ?>
+	
+	<div class="block">
+       <div class="block-heading">
+            
+            <a href="#widgetGroup" data-toggle="collapse">Daftar armada di Groups #<?php echo $group->group; ?> </a>
+        </div>
+        <div class="block-body collapse in" id="widgetGroup">
+            <table class="table table-condensed table-bordered table-striped table-small">
+           		<tr>
+	                <td class="span8">
+                    <?php $id = (int) Input::get('id', false); ?>
+	                	<?php foreach($fleets as $fleet): ?>
+	                		<?php echo  HTML::link('schedule/detail/'.$fleet->fleet_id.'/'.$id , Fleet::find($fleet->fleet_id)->taxi_number , array('id'=>'loaddata','class' => 'btn btn-mini btn-info')) ; ?>
+	                	<?php endforeach; ?>
+	                </td>
+	            </tr>
+            </table>
+        </div>
+    </div>
+
+
+<?php \Laravel\Section::stop(); ?>
+
+<?php \Laravel\Section::start('otherscript'); ?>
+ 	
+<?php \Laravel\Section::stop(); ?>
+<?php echo view('themes.layouts.common')->with(get_defined_vars())->render(); ?>
