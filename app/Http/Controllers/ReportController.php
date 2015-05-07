@@ -161,6 +161,57 @@ class ReportController extends Controller
     }
 
     /**
+     * sum loader.
+     *
+     * @return
+     */
+    public function dailysum(Request $request)
+    { 
+      $date       = $request->get('dateops', date('Y-m-d'));
+      $shift_id   = $request->get('shift_id', 0);        
+      $checkins = $this->checkins
+                ->where('operasi_time', $date)
+                ->where('pool_id', $this->user->pool_id)
+                ->where('shift_id', $shift_id)
+                ->get();
+
+      $financialdata = [];
+          //set default 0
+      foreach ($this->label as $key => $value) {
+            $financialdata[$value] = 0;
+      }
+      $financialdata['ks'] = 0;
+      $financialdata['total'] = 0;
+      $financialdata['setoranops'] = 0;
+
+      foreach ($checkins as $finan) {
+      
+          $financial = $finan->financial;        
+
+          if($financial)
+          { 
+            foreach ($financial as $mony) {
+              $financialdata[$this->label[$mony->financial_type_id]] += $mony->amount;
+            }
+          
+            $financialdata['ks'] += $financialdata['setoran_cash'] - ( ( $financialdata['setoran_wajib'] + $financialdata['tabungan_sparepart'] + $financialdata['denda'] + $financialdata['cicilan_sparepart']  
+                                    + $financialdata['cicilan_ks'] + $financialdata['biaya_cuci'] + $financialdata['iuran_laka'] + $financialdata['cicilan_dp_kso'] + $financialdata['cicilan_hutang_lama'] + $financialdata['cicilan_lain'] 
+                                    + $financialdata['hutang_dp_sparepart'] ) - $financialdata['potongan'] );
+            
+            $financialdata['total'] += ( $financialdata['setoran_wajib'] + $financialdata['tabungan_sparepart'] + $financialdata['denda'] + $financialdata['cicilan_sparepart']  
+                                    + $financialdata['cicilan_ks'] + $financialdata['biaya_cuci'] + $financialdata['iuran_laka'] + $financialdata['cicilan_dp_kso'] + $financialdata['cicilan_hutang_lama'] + $financialdata['cicilan_lain'] 
+                                    + $financialdata['hutang_dp_sparepart'] );
+
+            $financialdata['setoranops'] += ($financialdata['setoran_cash'] - ($financialdata['biaya_cuci'] + $financialdata['iuran_laka']));
+          } 
+
+      }
+      
+      return response($financialdata, 200)
+              ->header('Content-Type', 'application/json'); 
+    }
+
+    /**
      * export to excel.
      *
      * @return

@@ -59,7 +59,34 @@ $('#viewsReport').on('click', function(e){
     var grid = $('#jqGrid01');
 
     grid.clearGridData();
-    grid.setGridParam({ postData: {dateops: dateSchedule , shift_id: shift_id} });
+    grid.setGridParam({ 
+        postData: {dateops: dateSchedule , shift_id: shift_id, _token: crsf_token} ,
+        loadComplete: function(){
+            $.post( "/reports/dailysum.json", { dateops: dateSchedule , shift_id: shift_id, _token: crsf_token })
+                    .done(function( data ) {
+                        console.log(data);                    
+                        grid.jqGrid('footerData', 'set', {
+                                name: 'Total:', 
+                                setoran_cash: data.setoran_cash, 
+                                setoran_wajib: data.setoran_wajib,
+                                tabungan_sparepart: data.tabungan_sparepart,
+                                denda: data.denda,
+                                potongan: data.potongan,
+                                cicilan_sparepart: data.cicilan_sparepart,
+                                cicilan_ks: data.cicilan_ks,
+                                biaya_cuci: data.biaya_cuci,
+                                iuran_laka: data.iuran_laka,
+                                cicilan_dp_kso: data.cicilan_dp_kso,
+                                cicilan_hutang_lama: data.cicilan_hutang_lama,
+                                ks: data.ks,
+                                cicilan_lain: data.cicilan_lain,
+                                hutang_dp_sparepart: data.hutang_dp_sparepart,
+                                total: data.total,
+                                setoranops: data.setoranops,
+                        });
+            });   
+        }
+    });
     grid.trigger('reloadGrid');
 
 	e.preventDefault();
@@ -116,6 +143,10 @@ function loadGrid(dateSchedule, shift_id) {
         viewrecords: true,
         gridview: true,
     	jsonReader : { repeatitems: false },
+        footerrow: true,
+        loadComplete: function () {                
+                       
+        }
     });
 
     grid.jqGrid('setFrozenColumns');

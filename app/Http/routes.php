@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::get('daily', 'ReportController@daily');
 		Route::post('daily.json', 'ReportController@dailyjson');
 		Route::get('daily.xlsx', 'ReportController@dailyexport');
+		Route::post('dailysum.json', 'ReportController@dailysum');
 	});
 });
 
