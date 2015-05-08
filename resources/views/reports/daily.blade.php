@@ -66,7 +66,7 @@ $('#viewsReport').on('click', function(e){
                     .done(function( data ) {
                         console.log(data);                    
                         grid.jqGrid('footerData', 'set', {
-                                name: 'Total:', 
+                                bapakasuh: 'Total', 
                                 setoran_cash: data.setoran_cash, 
                                 setoran_wajib: data.setoran_wajib,
                                 tabungan_sparepart: data.tabungan_sparepart,
@@ -103,12 +103,13 @@ function loadGrid(dateSchedule, shift_id) {
         height: 500,
         width: gwdth - 12,
         postData:{dateops: dateSchedule , _token: crsf_token },
-        colNames:['NO','NIP', 'NAMA','BODY', 'STATUS OPS','WAKTU MASUK', 'SETORAN MURNI','TAB S-PART','DENDA','DP S-PART','BAYAR KS','BAYAR S-PART','BAYAR DP-KSO','BAYAR HUT-LAMA','STKR BANDARA & KEAMANAN','CUCI','LAKA','HARUS DISETOR','POTONGAN','SETOR CASH','KETEKORAN', 'SETORAN OPS'],
+        colNames:['NO','NIP', 'NAMA','BODY', 'BAPAK ASUH','STATUS OPS','WAKTU MASUK', 'SETORAN MURNI','TAB S-PART','DENDA','DP S-PART','BAYAR KS','BAYAR S-PART','BAYAR DP-KSO','BAYAR HUT-LAMA','STKR BANDARA & KEAMANAN','CUCI','LAKA','HARUS DISETOR','POTONGAN','SETOR CASH','KETEKORAN', 'SETORAN OPS'],
         colModel:[
 			{name:'no',index:'no', width:20, sortable:false ,search:false, fixed: true, frozen:true },
             {name:'nip',index:'nip', width:60 ,search:true, fixed: true , frozen:true},
-            {name:'name',index:'name', width:120 ,search:false, fixed: true , frozen:true},
+            {name:'nama',index:'nama', width:120 ,search:false, fixed: true , frozen:true},
             {name:'taxi_number',index:'taxi_number', width:60 ,search:true, fixed: true , frozen:true},
+            {name:'bapakasuh',index:'bapakasuh', width:120 ,search:true, fixed: true , frozen:true},
             {name:'operasi_status_id',index:'operasi_status_id', width:50 ,search:false , align:"center",fixed: true , frozen:true},
 
             {name:'checkin_time',index:'checkin_time', width:125 ,search:false, fixed: true , frozen:true},

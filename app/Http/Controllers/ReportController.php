@@ -119,15 +119,17 @@ class ReportController extends Controller
       		$fleet = $finan->fleet;
       		$status = $finan->status;
       		$financial = $finan->financial;
-
+          $bapakasuh = $fleet->bapakasuh()->wherePivot('status',1)->first();
+          $namabapakasuh = ($bapakasuh)? $bapakasuh->first_name . ' ' .$bapakasuh->last_name : 'N/A';
         	$datainfromation = [
         		'no' => $no,
         		'taxi_number' => ($fleet)? $fleet->taxi_number: 'UnKnown', 
         		'nip' => ($driver)? $driver->nip: 'N/A',
-				'name' => ($driver)? $driver->name: 'N/A',
-				'checkin_time' => $finan->checkin_time->format('Y-m-d H:i:s'),
-                //'shift_id' => $finan->shift_id,
-                'operasi_status_id' => ($status)? $status->kode: 'N/A',
+				    'nama' => ($driver)? $driver->name: 'N/A',
+				    'checkin_time' => $finan->checkin_time->format('Y-m-d H:i:s'),
+            'bapakasuh' => $namabapakasuh,
+            //'shift_id' => $finan->shift_id,
+            'operasi_status_id' => ($status)? $status->kode: 'N/A',
         	];
 
         	$financialdata = [];
@@ -192,17 +194,24 @@ class ReportController extends Controller
           { 
             foreach ($financial as $mony) {
               $financialdata[$this->label[$mony->financial_type_id]] += $mony->amount;
-            }
-          
-            $financialdata['ks'] += $financialdata['setoran_cash'] - ( ( $financialdata['setoran_wajib'] + $financialdata['tabungan_sparepart'] + $financialdata['denda'] + $financialdata['cicilan_sparepart']  
-                                    + $financialdata['cicilan_ks'] + $financialdata['biaya_cuci'] + $financialdata['iuran_laka'] + $financialdata['cicilan_dp_kso'] + $financialdata['cicilan_hutang_lama'] + $financialdata['cicilan_lain'] 
-                                    + $financialdata['hutang_dp_sparepart'] ) - $financialdata['potongan'] );
+            }     
             
-            $financialdata['total'] += ( $financialdata['setoran_wajib'] + $financialdata['tabungan_sparepart'] + $financialdata['denda'] + $financialdata['cicilan_sparepart']  
-                                    + $financialdata['cicilan_ks'] + $financialdata['biaya_cuci'] + $financialdata['iuran_laka'] + $financialdata['cicilan_dp_kso'] + $financialdata['cicilan_hutang_lama'] + $financialdata['cicilan_lain'] 
-                                    + $financialdata['hutang_dp_sparepart'] );
+            $financialdata['ks'] = ($financialdata['setoran_cash'] - ( 
+                                    ( $financialdata['setoran_wajib'] + $financialdata['tabungan_sparepart'] 
+                                    + $financialdata['denda'] + $financialdata['cicilan_sparepart']  
+                                    + $financialdata['cicilan_ks'] + $financialdata['biaya_cuci'] 
+                                    + $financialdata['iuran_laka'] + $financialdata['cicilan_dp_kso']
+                                    + $financialdata['cicilan_hutang_lama'] + $financialdata['cicilan_lain'] 
+                                    + $financialdata['hutang_dp_sparepart'] ) - $financialdata['potongan']));
+            
+            $financialdata['total'] = ($financialdata['setoran_wajib'] + $financialdata['tabungan_sparepart'] 
+                                      + $financialdata['denda'] + $financialdata['cicilan_sparepart']  
+                                      + $financialdata['cicilan_ks'] + $financialdata['biaya_cuci'] 
+                                      + $financialdata['iuran_laka'] + $financialdata['cicilan_dp_kso'] 
+                                      + $financialdata['cicilan_hutang_lama'] + $financialdata['cicilan_lain'] 
+                                      + $financialdata['hutang_dp_sparepart'] );
 
-            $financialdata['setoranops'] += ($financialdata['setoran_cash'] - ($financialdata['biaya_cuci'] + $financialdata['iuran_laka']));
+            $financialdata['setoranops'] = ($financialdata['setoran_cash'] - ($financialdata['biaya_cuci'] + $financialdata['iuran_laka']));
           } 
 
       }
@@ -328,7 +337,8 @@ class ReportController extends Controller
               $fleet = $finan->fleet;
               $status = $finan->status;
               $financial = $finan->financial;
-
+              $bapakasuh = $fleet->bapakasuh()->wherePivot('status',1)->first();
+              $namabapakasuh = ($bapakasuh)? $bapakasuh->first_name . ' ' .$bapakasuh->last_name : 'TIDAK ADA BAPAK ASUH';
               
               if($financial)
               { 
@@ -338,8 +348,9 @@ class ReportController extends Controller
               }
 
 
+
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
-              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, 'TIDAK ADA BAPAK ASUH' );
+              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, $namabapakasuh);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $starline, $driver->nip);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $starline, $driver->name);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $starline, $fleet->taxi_number);
@@ -464,7 +475,6 @@ class ReportController extends Controller
 
           }
         }
-
 
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save(storage_path('excels').'L'. $this->user->pool_id.$date.'.xls');
