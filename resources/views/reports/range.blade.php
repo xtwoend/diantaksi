@@ -83,11 +83,11 @@ function loadGrid(start, end, shift_id) {
         height: 500,
         width: gwdth - 12,
         postData:{start: start ,end: end, _token: crsf_token },
-        colNames:['NO','TANGGAL', 'JENIS KENDARAAN', 'SETORAN MURNI','TAB S-PART','DENDA','DP S-PART','BAYAR KS','BAYAR S-PART','BAYAR DP-KSO','BAYAR HUT-LAMA','STKR BANDARA & KEAMANAN','CUCI','LAKA','HARUS DISETOR','POTONGAN','SETOR CASH','KETEKORAN', 'SETORAN OPS'],
+        colNames:['NO','TANGGAL', 'SETORAN MURNI','TAB S-PART','DENDA','DP S-PART','BAYAR KS','BAYAR S-PART','BAYAR DP-KSO','BAYAR HUT-LAMA','STKR BANDARA & KEAMANAN','CUCI','LAKA','HARUS DISETOR','POTONGAN','SETOR CASH','KETEKORAN', 'SETORAN OPS'],
         colModel:[
 			{name:'no',index:'no', width:20, sortable:false ,search:false, fixed: true, frozen:true },
             {name:'operasi_time',index:'operasi_time', width:100 ,search:false, fixed: true , frozen:true},  
-            {name:'fleet_model',index:'fleet_model', width:100 ,search:false, fixed: true , frozen:true},                 
+            //{name:'fleet_model',index:'fleet_model', width:100 ,search:false, fixed: true , frozen:true},                 
 
             {name:'setoran_wajib',index:'setoran_wajib', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
             {name:'tabungan_sparepart',index:'tabungan_sparepart', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
