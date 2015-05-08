@@ -30,7 +30,7 @@
 <body class="">
   
   @yield('body')
-
+ 
   <script src="/js/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="/js/bootstrap.js"></script>

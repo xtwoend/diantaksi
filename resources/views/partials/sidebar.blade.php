@@ -3,11 +3,8 @@
           <section class="vbox">
             <section class="w-f-md scrollable">
               <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railOpacity="0.2">
-                
-
-
                 <!-- nav -->                 
-                <nav class="">
+                <nav class="nav-primary hidden-xs">
                   <ul class="nav bg clearfix" data-ride="collapse">
                     <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
                       Laporan Operasi 
@@ -77,18 +74,6 @@
                       <li>
                         <span class="arrow bottom hidden-nav-xs"></span>
                         <a href="#">Settings</a>
-                      </li>
-                      <li>
-                        <a href="profile.html">Profile</a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <span class="badge bg-danger pull-right">3</span>
-                          Notifications
-                        </a>
-                      </li>
-                      <li>
-                        <a href="docs.html">Help</a>
                       </li>
                       <li class="divider"></li>
                       <li>

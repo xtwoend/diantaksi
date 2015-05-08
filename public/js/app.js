@@ -319,8 +319,21 @@ Date.now = Date.now || function() { return +new Date; };
   		$('[data-toggle^="shift"]').shift('init');
       return true;
   	};
-  	// unmobile
+
+    var tablet = function(option){
+      if(option == 'reset'){
+        $('#nav').removeClass('nav-xs');
+        return true;
+      }
+      $('#nav').addClass('nav-xs');
+      return true;
+    }
+
+    // unmobile
   	$window.width() < 768 && mobile();
+    // untablet
+    $window.width() <= 1024 && tablet();
+
     // resize
     var $resize, $width = $window.width();
   	$window.resize(function() {
@@ -329,7 +342,8 @@ Date.now = Date.now || function() { return +new Date; };
         $resize = setTimeout(function(){
           setHeight();
           $window.width() < 768 && mobile();
-          $window.width() >= 768 && mobile('reset') && fixVbox();
+          $window.width() <= 1024 && tablet() && mobile('reset') && fixVbox();
+          $window.width() >= 1024 && tablet('reset') && mobile('reset') && fixVbox();
           $width = $window.width();
         }, 500);
       }
