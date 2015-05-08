@@ -95,9 +95,10 @@ class ReportDaily
       	$sord 		= $request->get('sord');
 
       	$checkins = $this->checkins
-      					->where('operasi_time',$date)
-      					->where('pool_id', $this->user->pool_id)
-      					->where('shift_id', $shift_id);
+                ->join('fleets', 'checkins.fleet_id', '=', 'fleets.id')
+                ->where('checkins.operasi_time',$date)
+      					->where('checkins.pool_id', $this->user->pool_id)
+      					->where('checkins.shift_id', $shift_id);
 
       	$count = $checkins->count();
       	if( $count > 0 ) {
@@ -112,7 +113,10 @@ class ReportDaily
 
       	if($start < 0) $start = 0;
 
-      	$financials = $checkins->skip($start)->take($limit)->get();
+      	$financials = $checkins
+                      ->skip($start)->take($limit)
+                      ->orderBy('fleets.taxi_number')
+                      ->get(['checkins.*','fleets.taxi_number']);
 
       	$data['page'] = $page;
       	$data['total'] = $total_pages;
@@ -123,14 +127,13 @@ class ReportDaily
       	foreach ($financials as $finan) {
       		$no++;
       		$driver = $finan->driver;
-      		$fleet = $finan->fleet;
       		$status = $finan->status;
       		$financial = $finan->financial;
-          $bapakasuh = $fleet->bapakasuh()->wherePivot('status',1)->first();
+          $bapakasuh = $finan->fleet->bapakasuh()->wherePivot('status',1)->first();
           $namabapakasuh = ($bapakasuh)? $bapakasuh->first_name . ' ' .$bapakasuh->last_name : 'N/A';
         	$datainfromation = [
         		'no' => $no,
-        		'taxi_number' => ($fleet)? $fleet->taxi_number: 'UnKnown', 
+        		'taxi_number' => $finan->taxi_number, 
         		'nip' => ($driver)? $driver->nip: 'N/A',
 				    'nama' => ($driver)? $driver->name: 'N/A',
 				    'checkin_time' => $finan->checkin_time->format('Y-m-d H:i:s'),
