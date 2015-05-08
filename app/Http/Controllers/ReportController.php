@@ -478,7 +478,7 @@ class ReportController extends Controller
 
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save(storage_path('excels/').'L'. $this->user->pool_id.$date.'.xls');
-    	return response()->download(storage_path('excels/').'L'. $this->user->pool_id.$date.'.xls', 'Laporan-Tanggal-'. $date .'.xls' );
+    	return response()->download(storage_path('excels/').'L'. $this->user->pool_id.$date.'.xls', 'Laporan-'.$this->user->pool->pool_name.'Tanggal-'. $date .'.xls' );
     }
 
 }
