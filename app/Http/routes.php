@@ -30,6 +30,11 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::post('daily.json', 'ReportController@dailyjson');
 		Route::get('daily.xlsx', 'ReportController@dailyexport');
 		Route::post('dailysum.json', 'ReportController@dailysum');
+
+		Route::get('range', 'ReportController@range');
+		Route::post('range.json', 'ReportController@rangejson');
+		Route::get('range.xlsx', 'ReportController@rangexport');
+		Route::post('rangesum.json', 'ReportController@rangesum');
 	});
 });
 

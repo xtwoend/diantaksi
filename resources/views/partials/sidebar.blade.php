@@ -18,6 +18,12 @@
                         <span class="font-bold">Laporan Harian</span>
                       </a>
                     </li>
+                    <li>
+                      <a href="{{ url('reports/range') }}">
+                        <i class="icon-layers icon"></i>
+                        <span class="font-bold">Laporan Kas Harian</span>
+                      </a>
+                    </li>
                     <li class="m-b hidden-nav-xs"></li>
                   </ul>
                   <ul class="nav" data-ride="collapse">
