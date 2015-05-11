@@ -22,7 +22,90 @@
                 <section>
                   <section class="vbox">
                     <section class="scrollable padder-lg">
-                      <h2 class="font-thin m-b">Nomor Body {{ $fleet->taxi_number }}</h2>
+                      	<div class="row m-t">
+                      		<div class="col-md-6">
+                      			<section class="panel panel-default">
+			                        <header class="panel-heading bg-light no-border">
+			                          <div class="clearfix">
+			                            <div class="clear">
+			                              <div class="h3 m-t-xs m-b-xs">
+			                                BODY <span class="pull-right">{{ $fleet->taxi_number }}</span>
+			                              </div>			                            
+			                            </div>
+			                          </div>
+			                        </header>
+			                        <div class="list-group no-radius alt">
+			                          <a class="list-group-item" href="#">
+			                            Nomor Polisi <span class="pull-right font-bold">{{ $kso->fleet->police_number }}</span>
+			                          </a>
+			                          <a class="list-group-item" href="#"> 
+			                            Nomor Engine <span class="pull-right font-bold">{{ $kso->fleet->engine_number }}</span>
+			                          </a>
+			                          <a class="list-group-item" href="#">
+			                            Nomor Chassis <span class="pull-right font-bold">{{ $kso->fleet->chassis_number }}</span>
+			                          </a>
+			                          <a class="list-group-item" href="#">
+			                            Status Armada <span class="pull-right font-bold">{{ ($kso->fleet->fg_blocked == 1 || $kso->fleet->fg_bengkel == 1) ? 'Blocked' : 'Ready' }}</span>
+			                          </a>
+			                          <a class="list-group-item" href="#">
+			                            Saldo Armada 
+			                            <span class="pull-right font-bold">
+			                            	<?php $saldo =  ($total->cicilan_ks - $total->ks) + ($total->tabungan_sparepart + $total->cicilan_sparepart + $total->hutang_dp_sparepart) - $total_pemakaian_part ?>
+			                            	{{ number_format($saldo, 0,',','.') }}
+			                            </span>
+			                          </a>
+			                          
+			                        </div>
+			                    </section>
+                      		</div>
+
+                      		<div class="col-md-6">
+                      			<section class="panel panel-default">
+				                    <header class="panel-heading bg-light no-border">
+				                    	<div class="clearfix">
+					                      <ul class="nav nav-tabs nav-justified">
+					                        <li class="active h3 m-t-xs m-b-xs"><a href="#saldo" data-toggle="tab">Saldo</a></li>
+					                        <li class="h3 m-t-xs m-b-xs"><a href="#dp" data-toggle="tab">DP KSO</a></li>
+					                      </ul>
+					                    </div>
+				                    </header>
+				                    <div class="tab-content">
+				                        <div class="tab-pane active list-group no-radius alt m-b-none" id="saldo">
+					                          <a class="list-group-item" href="#">
+					                            Total KS <span class="pull-right font-bold">{{ number_format($total->ks, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#"> 
+					                            Pembayaran KS <span class="pull-right font-bold">{{ number_format($total->cicilan_ks, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#">
+					                            Tabungan Sparepart <span class="pull-right font-bold">{{ number_format($total->tabungan_sparepart, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#">
+					                            Pemakaian Sparepart <span class="pull-right font-bold">{{ number_format($total_pemakaian_part, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#">
+					                            Pembayaran Sparepart <span class="pull-right font-bold">{{ number_format(($total->cicilan_sparepart + $total->hutang_dp_sparepart), 0,',','.') }}</span>
+					                          </a>
+				                        </div>
+				                        <div class="tab-pane list-group no-radius alt m-b-none" id="dp">
+				                        	<a class="list-group-item" href="#">
+					                            DP KSO <span class="pull-right font-bold">{{ number_format($kso->dp, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#"> 
+					                            Hutang DP KSO <span class="pull-right font-bold">{{ number_format($kso->sisa_dp, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#">
+					                            Pembayaran DP KSO <span class="pull-right font-bold">{{ number_format($total->cicilan_dp_kso, 0,',','.') }}</span>
+					                          </a>
+					                          <a class="list-group-item" href="#">
+					                            Saldo DP KSO <span class="pull-right font-bold">{{ number_format(($kso->sisa_dp - $total->cicilan_dp_kso), 0,',','.') }}</span>
+					                          </a>
+					                         
+				                        </div>
+				                    </div>
+				                  </section>
+                      		</div>
+                      	</div>
                       	<div class="row">
                       		<div class="col-md-6">
                       			<section class="panel panel-default">
@@ -92,7 +175,7 @@
                       		</div>
                       	</div>
                     	<section class="panel panel-default">
-			                <header class="panel-heading font-bold">Peningkatan hutang dalam 10 hari terakhir</header>
+			                <header class="panel-heading font-bold">Peningkatan hutang armada dalam 10 hari terakhir</header>
 			                <div class="panel-body">
 			                  <div id="flot-1ine" style="height:250px"></div>
 			                </div>
