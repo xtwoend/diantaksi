@@ -10,18 +10,26 @@ use App\Diantaksi\Eloquent\FleetModel;
 use App\Diantaksi\Reports\ReportDaily;
 use App\Diantaksi\Reports\ReportRange;
 
+use App\Diantaksi\Eloquent\Kso;
+
 class ReportController extends Controller
-{	
+{	 
+    /**
+     * [$ksos description]
+     * @var [type]
+     */
+    protected $ksos;
  
     /**
      * .
      *
      * @return
      */
-    public function __construct()
+    public function __construct(Kso $ksos)
     {
       $this->dailyreport = new ReportDaily;
       $this->rangereport = new ReportRange;
+      $this->ksos = $ksos;
     }
 
     /**
@@ -104,4 +112,6 @@ class ReportController extends Controller
     {
         return $this->rangereport->export($request);
     }
+
+
 }

@@ -21,8 +21,23 @@
                         <span class="font-bold">Laporan Kas Harian</span>
                       </a>
                     </li>
+                    <li>
+                      <a href="{{ url('reports/armada') }}">
+                        <i class="icon-layers icon"></i>
+                        <span class="font-bold">Lap. Finan. Armda</span>
+                      </a>
+                    </li>
+                    {{-- 
+                    <li>
+                      <a href="{{ url('reports/driver') }}">
+                        <i class="icon-layers icon"></i>
+                        <span class="font-bold">Lap. Finan. Driver</span>
+                      </a>
+                    </li>
+                    --}}
                     <li class="m-b hidden-nav-xs"></li>
                   </ul>
+                  @if(Auth::user()->can('kontrol-pool'))
                   <ul class="nav" data-ride="collapse">
                     <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
                       Menu Controll 
@@ -49,6 +64,8 @@
                         @endforeach
                       </ul>
                     </li>
+                  </ul>
+                  @endif
                 </nav>
                 <!-- / nav -->
               </div>

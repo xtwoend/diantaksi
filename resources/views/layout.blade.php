@@ -42,6 +42,13 @@
   <!-- jq grid -->
   <script src="/js/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
   <script src="/js/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>   
+  <!-- Flot -->
+  <script src="/js/charts/flot/jquery.flot.min.js"></script>
+  <script src="/js/charts/flot/jquery.flot.tooltip.min.js"></script>
+  <script src="/js/charts/flot/jquery.flot.resize.js"></script>
+  <script src="/js/charts/flot/jquery.flot.orderBars.js"></script>
+  <script src="/js/charts/flot/jquery.flot.pie.min.js"></script>
+  <script src="/js/charts/flot/jquery.flot.grow.js"></script>
 
   <script src="/js/app.js"></script>  
   

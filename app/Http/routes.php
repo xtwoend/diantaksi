@@ -35,7 +35,12 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::post('range.json', 'ReportController@rangejson');
 		Route::get('range.xlsx', 'ReportController@rangexport');
 		Route::post('rangesum.json', 'ReportController@rangesum');
+
+		Route::get('armada', 'ArmadaController@armada');
+		Route::get('armada/{id}', 'ArmadaController@index');
+		Route::post('armada/hutang', 'ArmadaController@hutang');
 	});
+
 });
 
 

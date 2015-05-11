@@ -8,7 +8,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword, RoleTrait;
 
     /**
      * The database table used by the model.
@@ -50,5 +50,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function pool()
     {
         return $this->belongsTo(__NAMESPACE__ . '\\Pool', 'pool_id');
+    }
+
+    /**
+     * is Admin.
+     *
+     * @return
+     */
+    public function getIsAdminAttribute()
+    {
+        return $this->attributes['admin'] == 1;
+    }
+
+
+    /**
+     * user roles.
+     *
+     * @return
+     */
+    public function is()
+    {
+        # code...
     }
 }
