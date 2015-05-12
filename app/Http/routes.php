@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('change/{pool_id}', 'DashboardController@change');
 
 	Route::group(['prefix'=>'reports'], function(){
+		
 		Route::get('daily', 'ReportController@daily');
 		Route::post('daily.json', 'ReportController@dailyjson');
 		Route::get('daily.xlsx', 'ReportController@dailyexport');
@@ -37,8 +38,12 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::post('rangesum.json', 'ReportController@rangesum');
 
 		Route::get('armada', 'ArmadaController@armada');
-		Route::get('armada/{id}', 'ArmadaController@index');
+		Route::post('armada/reports.json', 'ArmadaController@reportjson');
+		Route::get('armada/reports.xlsx', 'ArmadaController@export');
 		Route::post('armada/hutang', 'ArmadaController@hutang');
+		Route::get('armada/{id}', 'ArmadaController@index');
+
+		
 	});
 
 });

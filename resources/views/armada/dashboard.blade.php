@@ -5,7 +5,7 @@
 	<section class="vbox">
         <section class="hbox stretch">
                 <!-- side content -->
-                <aside class="aside bg-light dk" id="sidebar">
+                <aside class="aside-sm bg-light dk" id="sidebar">
                   <section class="vbox animated fadeInUp">
                     <section class="scrollable hover">
                       <div class="list-group no-radius no-border no-bg m-t-n-xxs m-b-none auto">
@@ -178,12 +178,46 @@
 			                    @endif
                       		</div>
                       	</div>
-                    	<section class="panel panel-default">
-			                <header class="panel-heading font-bold">Peningkatan hutang armada dalam 10 hari terakhir</header>
-			                <div class="panel-body">
-			                  <div id="flot-1ine" style="height:250px"></div>
-			                </div>
-		            	</section>
+                     	<div class="row">
+	                     	<div class="col-md-12">
+		                    	<section class="panel panel-default">
+					                <header class="panel-heading font-bold">Peningkatan hutang armada dalam 10 hari terakhir</header>
+					                <div class="panel-body">
+					                  <div id="flot-1ine" style="height:250px"></div>
+					                </div>
+				            	</section>
+				            </div>
+				        </div>
+				        <div class="row">
+	                     	<div class="col-md-12">
+	                     		<section class="panel panel-default">
+					                <header class="panel-heading font-bold">                  
+					                  Tanggal Operasi
+					                </header>
+					                <div class="panel-body">
+					                  <form class="form-inline" role="form" action="{{ url('reports/armada/reports.xlsx') }}">
+					                    <div class="form-group">
+					                      <label class="sr-only" for="date">Tanggal Operasi</label>
+					                      <input class="input input-s datepicker-input form-control" size="16" type="text" value="{{ date('Y-m-d') }}" data-date-format="yyyy-mm-dd" name="date" id="date">
+					                    </div>
+					                    <input type="hidden" name="id" value="{{ $kso->id }}" id="id">
+					                    <button type="button" class="btn btn-primary" id="viewsReport">Tampilkan</button>
+
+					                    <button type="submit" class="btn btn-success" data-toggle="modal">Download</button>
+					                  </form>                  
+					                </div>
+					            </section>
+
+					            <section class="panel panel-default"  id="widget-report-daily">
+					                <header class="panel-heading">
+					                  Laporan Harian
+					                </header>
+					                <table id="jqGrid01"><tr><td></td></tr></table> 
+							    	<div id="pager"></div>
+							    </section>
+
+	                     	</div>
+	                     </div>
                     </section>                    
                   </section>
                 </section>
@@ -196,6 +230,11 @@
 @section('js')
 
 <script type="text/javascript">
+
+$('#date').datepicker({
+	viewMode: 1
+});
+
 $(function(){
 	
 	var request = $.ajax({
@@ -240,7 +279,85 @@ $(function(){
           data: []
       }], options
   	);
-
 });
+
+$(function(){
+	var dateSchedule = $('#date').val();
+	loadGrid(dateSchedule);
+});
+
+$('#viewsReport').on('click', function(e){
+	var dateSchedule = $('#date').val();
+	var kso_id = $('#id').val();
+    var grid = $('#jqGrid01');
+
+    grid.clearGridData();
+    grid.setGridParam({postData: {dateops: dateSchedule , kso_id: kso_id , _token: crsf_token}});
+    grid.trigger('reloadGrid');
+
+	e.preventDefault();
+});
+
+function loadGrid(dateSchedule) {
+	var gwdth = $('#widget-report-daily').width();
+	var grid = $("#jqGrid01");
+
+    grid.jqGrid({
+        url: "/reports/armada/reports.json",
+        datatype: "json",
+        mtype: "POST",
+        height: 500,
+        width: gwdth - 12,
+        postData:{dateops: dateSchedule , _token: crsf_token },
+        colNames:['NO', 'TANGGAL','NIP', 'NAMA', 'BAPAK ASUH','STATUS OPS','WAKTU MASUK', 'SETORAN MURNI','TAB S-PART','DENDA','DP S-PART','BAYAR KS','BAYAR S-PART','BAYAR DP-KSO','BAYAR HUT-LAMA','STKR BANDARA & KEAMANAN','CUCI','LAKA','HARUS DISETOR','POTONGAN','SETOR CASH','KETEKORAN', 'SETORAN OPS'],
+        colModel:[
+			{name:'no',index:'no', width:20, sortable:false ,search:false, fixed: true, frozen:true },
+			{name:'operasi_time',index:'operasi_time', width:80 ,search:false, fixed: true , frozen:true},
+            {name:'nip',index:'nip', width:60 ,search:true, fixed: true , frozen:true},
+            {name:'nama',index:'nama', width:120 ,search:false, fixed: true , frozen:true},
+            {name:'bapakasuh',index:'bapakasuh', width:120 ,search:true, fixed: true , frozen:true},
+            {name:'operasi_status_id',index:'operasi_status_id', width:50 ,search:false , align:"center",fixed: true , frozen:true},
+
+            {name:'checkin_time',index:'checkin_time', width:125 ,search:false, fixed: true , frozen:true},
+            //{name:'shift_id',index:'shift_id', width:70 ,search:false, fixed: true , frozen:true},                        
+
+            {name:'setoran_wajib',index:'setoran_wajib', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'tabungan_sparepart',index:'tabungan_sparepart', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'denda',index:'denda', width:100 ,search:false , align:"right",fixed: true ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'hutang_dp_sparepart',index:'hutang_dp_sparepart', width:100,fixed: true ,search:false , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+                        
+            {name:'cicilan_ks',index:'cicilan_ks', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+			{name:'cicilan_sparepart',index:'cicilan_sparepart', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'cicilan_dp_kso',index:'cicilan_dp_kso', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'cicilan_hutang_lama',index:'cicilan_hutang_lama', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+                        
+            {name:'cicilan_lain',index:'cicilan_lain', width:100 ,search:false,fixed: true , align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'biaya_cuci',index:'biaya_cuci', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'iuran_laka',index:'iuran_laka', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+                        
+            {name:'total',index:'total', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'potongan',index:'potongan', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'setoran_cash',index:'setoran_cash', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'ks',index:'ks', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+            {name:'setoranops',index:'setoranops', width:100 ,search:false ,fixed: true, align:"right" ,formatter:'currency', formatoptions:{decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 0, prefix: ""}},
+        ],
+        pager: "#pager",
+        rowNum: 40,
+		rowList: [40,60,100,200],
+		sortable: false,
+        sortname: "operasi_time",
+        sortorder: "asc",
+        viewrecords: true,
+        gridview: true,
+    	jsonReader : { repeatitems: false },
+        shrinkToFit: false,
+        footerrow: true,
+        userDataOnFooter: true
+    });
+
+    grid.jqGrid('setFrozenColumns');
+
+    return false;
+}
 </script>
 @endsection

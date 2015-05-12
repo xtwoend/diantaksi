@@ -7,6 +7,7 @@ use DB;
 use App\Diantaksi\Eloquent\Fleet;
 use App\Diantaksi\Eloquent\Kso;
 use Illuminate\Support\Facades\Auth;
+use App\Diantaksi\Reports\ReportArmada;
 
 class ArmadaController extends Controller
 {   
@@ -23,6 +24,12 @@ class ArmadaController extends Controller
     protected $ksos;
 
     /**
+     * [$reports description]
+     * @var [type]
+     */
+    protected $reports;
+
+    /**
      * .
      *
      * @return
@@ -31,6 +38,7 @@ class ArmadaController extends Controller
     {
         $this->fleets = $fleets;
         $this->ksos = $ksos;
+        $this->reports = new ReportArmada;
     }
 
     /**
@@ -120,6 +128,7 @@ class ArmadaController extends Controller
                   ->where('checkins.kso_id', $id)
                   ->whereBetween('checkins.operasi_time',[$last_date, date('Y-m-d')])
                   ->groupBy('operasi_time')
+                  ->orderBy('operasi_time', 'desc')
                   ->get();
 
         $data = [];
@@ -133,5 +142,26 @@ class ArmadaController extends Controller
         }
 
         return $data;
+    }
+
+
+    /**
+     * report armada harian.
+     *
+     * @return
+     */
+    public function reportjson(Request $request)
+    {
+        return $this->reports->json($request);
+    }
+
+    /**
+     * export to excel.
+     *
+     * @return
+     */
+    public function export(Request $request)
+    {
+        return $this->reports->export($request);
     }
 }

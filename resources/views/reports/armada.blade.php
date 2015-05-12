@@ -5,7 +5,7 @@
 	<section class="vbox">
         <section class="hbox stretch">
                 <!-- side content -->
-                <aside class="aside bg-light dk" id="sidebar">
+                <aside class="aside-sm bg-light dk" id="sidebar">
                   <section class="vbox animated fadeInUp">
                     <section class="scrollable hover">
                       <div class="list-group no-radius no-border no-bg m-t-n-xxs m-b-none auto">
