@@ -50,8 +50,10 @@
 			                          <a class="list-group-item" href="#">
 			                            Saldo Armada 
 			                            <span class="pull-right font-bold">
+			                            	@if($total)
 			                            	<?php $saldo =  ($total->cicilan_ks - $total->ks) + ($total->tabungan_sparepart + $total->cicilan_sparepart + $total->hutang_dp_sparepart) - $total_pemakaian_part ?>
 			                            	{{ number_format($saldo, 0,',','.') }}
+			                            	@endif
 			                            </span>
 			                          </a>
 			                          
@@ -60,6 +62,7 @@
                       		</div>
 
                       		<div class="col-md-6">
+                      			@if($total)
                       			<section class="panel panel-default">
 				                    <header class="panel-heading bg-light no-border">
 				                    	<div class="clearfix">
@@ -104,6 +107,7 @@
 				                        </div>
 				                    </div>
 				                  </section>
+				                  @endif
                       		</div>
                       	</div>
                       	<div class="row">

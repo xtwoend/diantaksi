@@ -110,7 +110,6 @@ class ArmadaController extends Controller
                   ->addSelect(DB::raw('checkins.id, checkins.operasi_time , checkins.pool_id, checkins.shift_id'))
                   ->leftJoin('checkin_financials', 'checkins.id', '=', 'checkin_financials.checkin_id')
                   ->where('checkins.kso_id', $id)
-                  ->where('checkins.operasi_time', '<=', $last_date)
                   ->groupBy('checkins.kso_id')
                   ->first();
         
@@ -126,11 +125,11 @@ class ArmadaController extends Controller
         $data = [];
         $setks = $sumtotal->ks;        
 
-        $i = 1;
+        $i = 10;
         foreach ($checkins as $loadks) {
-            $setks = $setks + $loadks->ks;
             $data[] = [$i, $setks];
-            $i++;
+            $setks = $setks - $loadks->ks;
+            $i--;
         }
 
         return $data;
