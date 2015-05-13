@@ -322,10 +322,10 @@ Date.now = Date.now || function() { return +new Date; };
 
     var tablet = function(option){
       if(option == 'reset'){
-        $('#nav').removeClass('nav-xs');
+        //$('#nav').removeClass('nav-xs');
         return true;
       }
-      $('#nav').addClass('nav-xs');
+      //$('#nav').addClass('nav-xs');
       return true;
     }
 

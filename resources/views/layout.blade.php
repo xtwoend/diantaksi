@@ -16,10 +16,9 @@
     <script src="/js/ie/html5shiv.js"></script>
     <script src="/js/ie/respond.min.js"></script>
     <script src="/js/ie/excanvas.js"></script>
-  <![endif]-->
-  
-  <link rel="stylesheet" type="text/css" media="screen" href="/js/jquery-ui-themes-1.11.4/themes/smoothness/jquery-ui.min.css"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="/js/jquery-ui-themes-1.11.4/themes/smoothness/theme.css"/>
+  <![endif]-->  
+  <link rel="stylesheet" type="text/css" media="screen" href="/js/jquery-ui-themes-1.11.4/themes/black-tie/jquery-ui.min.css"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="/js/jquery-ui-themes-1.11.4/themes/black-tie/theme.css"/>
   <link rel="stylesheet" type="text/css" media="screen" href="/js/jqgrid/css/ui.jqgrid-bootstarp.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="/js/jqgrid/css/ui.jqgrid.css" />
   <script type="text/javascript">
