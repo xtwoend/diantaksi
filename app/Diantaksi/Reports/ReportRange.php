@@ -434,4 +434,27 @@ class ReportRange
       $objWriter->save(storage_path('excels/').'LK'. $this->user->pool_id.$shift_id.$date.'.xls');
       return response()->download(storage_path('excels/').'LK'. $this->user->pool_id.$shift_id.$date.'.xls', 'Laporan-Kas-'.Str::slug($this->user->pool->pool_name, '-'). '-'. $shift[$shift_id] .'-Tanggal-'. $date .'.xls' );
   }
+
+  /**
+   * pendatapan vs ketekoran.
+   *
+   * @return array
+   */
+  public function persentasePendapatan($date, $pool_id)
+  {
+    $startdate      = date('Y-m-01', strtotime($date));
+    $enddate        = date('Y-m-d', strtotime($date));
+
+    $checkins = DB::table('checkins')
+                  ->select(DB::raw('sum(if((checkin_financials.financial_type_id = 1),checkin_financials.amount,0)) AS setoran_wajib,sum(if((checkin_financials.financial_type_id = 2),checkin_financials.amount,0)) AS tabungan_sparepart,sum(if((checkin_financials.financial_type_id = 3),checkin_financials.amount,0)) AS denda,sum(if((checkin_financials.financial_type_id = 4),checkin_financials.amount,0)) AS potongan,sum(if((checkin_financials.financial_type_id = 5),checkin_financials.amount,0)) AS cicilan_sparepart,sum(if((checkin_financials.financial_type_id = 6),checkin_financials.amount,0)) AS cicilan_ks,sum(if((checkin_financials.financial_type_id = 7),checkin_financials.amount,0)) AS biaya_cuci,sum(if((checkin_financials.financial_type_id = 8),checkin_financials.amount,0)) AS iuran_laka,sum(if((checkin_financials.financial_type_id = 9),checkin_financials.amount,0)) AS cicilan_dp_kso,sum(if((checkin_financials.financial_type_id = 10),checkin_financials.amount,0)) AS cicilan_hutang_lama,sum(if((checkin_financials.financial_type_id = 11),checkin_financials.amount,0)) AS ks,sum(if((checkin_financials.financial_type_id = 12),checkin_financials.amount,0)) AS cicilan_lain,sum(if((checkin_financials.financial_type_id = 13),checkin_financials.amount,0)) AS hutang_dp_sparepart,sum(if((checkin_financials.financial_type_id = 20),checkin_financials.amount,0)) AS setoran_cash,sum(if((checkin_financials.financial_type_id = 21),checkin_financials.amount,0)) AS tabungan,(sum(if((checkin_financials.financial_type_id = 11),checkin_financials.amount,0)) - sum(if((checkin_financials.financial_type_id = 6),checkin_financials.amount,0))) AS selisi_ks '))
+                  ->addSelect(DB::raw('checkins.id, checkins.operasi_time , checkins.pool_id, checkins.shift_id'))
+                  ->leftJoin('checkin_financials', 'checkins.id', '=', 'checkin_financials.checkin_id')
+                  ->whereBetween('checkins.operasi_time',[$startdate, $enddate])
+                  ->where('checkins.pool_id', $pool_id)
+                  ->groupBy('checkins.pool_id')
+                  ->first();
+    
+    return $checkins;
+  }
+
 }

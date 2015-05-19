@@ -41,9 +41,11 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::post('armada/reports.json', 'ArmadaController@reportjson');
 		Route::get('armada/reports.xlsx', 'ArmadaController@export');
 		Route::post('armada/hutang', 'ArmadaController@hutang');
-		Route::get('armada/{id}', 'ArmadaController@index');
+		Route::get('armada/{id}', 'ArmadaController@index');		
+	});
 
-		
+	Route::group(['prefix'=> 'statistics'], function(){
+		Route::post('pendapatan', 'DashboardController@persentasePendapatan');
 	});
 
 });

@@ -40,7 +40,11 @@
   <script src="/js/datepicker/bootstrap-datepicker.js"></script>
   <!-- jq grid -->
   <script src="/js/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
-  <script src="/js/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>   
+  <script src="/js/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script> 
+  <!-- Sparkline Chart -->
+  <script src="/js/charts/sparkline/jquery.sparkline.min.js"></script>  
+  <!-- Easy Pie Chart -->
+  <script src="/js/charts/easypiechart/jquery.easy-pie-chart.js"></script>
   <!-- Flot -->
   <script src="/js/charts/flot/jquery.flot.min.js"></script>
   <script src="/js/charts/flot/jquery.flot.tooltip.min.js"></script>

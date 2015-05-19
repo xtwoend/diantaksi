@@ -17,7 +17,7 @@ class Dash_Controller extends Base_Controller {
     return View::make('themes.layouts.dashboard',$this->data);
 	}
 
-	// Login Stuff
+	// Login Staff
     public function get_login(){
     	return View::make('themes.layouts.login');
     }

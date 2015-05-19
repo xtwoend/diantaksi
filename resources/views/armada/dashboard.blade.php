@@ -23,6 +23,25 @@
                   <section class="vbox">
                     <section class="scrollable padder-lg">
                       	<div class="row m-t">
+                      		<div class="col-md-12">
+                      			<section class="panel panel-default">
+			                        <header class="panel-heading bg-light no-border">
+			                          <div class="clearfix">
+			                            <div class="clear">
+			                              <div class="h3 m-t-xs m-b-xs">
+			                               	Check Sampai Dengan Tanggal
+			                              </div>			                            
+			                            </div>
+			                          </div>
+			                        </header>
+			                        <div class="panel-body">
+			                        	<form class="form-inline" role="form" method="GET">
+					                		<input class="input input-s datepicker-input form-control" size="16" type="text" value="{{ $date }}" data-date-format="yyyy-mm-dd" name="date" id="date">
+					                		<button type="submit" class="btn btn-success">CHECK</button>
+					                	</form>
+					                </div>
+			                    </section>
+                      		</div>
                       		<div class="col-md-6">
                       			<section class="panel panel-default">
 			                        <header class="panel-heading bg-light no-border">
@@ -198,12 +217,12 @@
 					                  <form class="form-inline" role="form" action="{{ url('reports/armada/reports.xlsx') }}">
 					                    <div class="form-group">
 					                      <label class="sr-only" for="date">Tanggal Operasi</label>
-					                      <input class="input input-s datepicker-input form-control" size="16" type="text" value="{{ date('Y-m-d') }}" data-date-format="yyyy-mm-dd" name="date" id="date">
+					                      <input class="input input-s datepicker-input form-control" size="16" type="text" value="{{ $date }}" data-date-format="yyyy-mm-dd" name="date" id="date">
 					                    </div>
 					                    <input type="hidden" name="id" value="{{ $kso->id }}" id="id">
 					                    <button type="button" class="btn btn-primary" id="viewsReport">Tampilkan</button>
 
-					                    <button type="submit" class="btn btn-success" data-toggle="modal">Download</button>
+					                    <button type="submit" class="btn btn-success" >Download</button>
 					                  </form>                  
 					                </div>
 					            </section>

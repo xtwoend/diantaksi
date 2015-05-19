@@ -63,8 +63,10 @@ class ArmadaController extends Controller
      *
      * @return Response
      */
-    public function index($id)
+    public function index($id, Request $request)
     {   
+        $date = $request->get('date', date('Y-m-d'));
+
         $ksos = $this->ksos
                 ->join('fleets', 'ksos.fleet_id','=', 'fleets.id')
                 ->where('ksos.pool_id', Auth::user()->pool_id)
@@ -77,6 +79,7 @@ class ArmadaController extends Controller
                   ->addSelect(DB::raw('checkins.id, checkins.operasi_time , checkins.pool_id, checkins.shift_id'))
                   ->leftJoin('checkin_financials', 'checkins.id', '=', 'checkin_financials.checkin_id')
                   ->where('checkins.kso_id', $id)
+                  ->where('checkins.operasi_time', '<=' , $date)
                   ->groupBy('checkins.kso_id')
                   ->first();
 
@@ -87,6 +90,7 @@ class ArmadaController extends Controller
                     ->where('wo_part_items.telah_dikeluarkan', 1)
                     ->where('work_orders.beban', 0)
                     ->where('work_orders.kso_id', $id)
+                    ->where('work_orders.finished_date_set', '<=' , $date)
                     ->groupBy('work_orders.kso_id')
                     ->first();
         
@@ -98,7 +102,7 @@ class ArmadaController extends Controller
 
         $kso = $this->ksos->find($id);
         $fleet = $kso->fleet;
-        return view('armada.dashboard', compact('ksos', 'kso', 'fleet', 'total', 'total_pemakaian_part'));
+        return view('armada.dashboard', compact('ksos', 'kso', 'fleet', 'total', 'total_pemakaian_part', 'date'));
     }
 
     /**
