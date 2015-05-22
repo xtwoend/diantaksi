@@ -87,20 +87,28 @@
         @if (in_array(9, $user_roles))
         <a href="#reportops-menu" class="nav-header" data-toggle="collapse"><i class="icon-list-alt icon-large"></i>Report Operasi</a>
         <ul id="reportops-menu" class="nav nav-list collapse">
+            <li><a href="http://118.91.130.220" target="_blank">Report Harian</a> </li>
+            <!--
             <li>{{ Html::link('/financials/reportdaily','Report Harian') }}</li>
             <li>{{ Html::link('/financials/reportmonthly','Report Kas Harian') }}</li>
+             -->
             <li>{{ Html::link('/reports/checkinoutreport','Laporan Waktu') }}</li>
             <li>{{ Html::link('/reports/baparchive','Berkas BAP Harian') }}</li>
             <li>{{ Html::link('/reports/checkinout','Report Check In & Out') }}</li>
+           
             <!--
             <li>{{ Html::link('/reportops/rekapsetoran','Rekap Setoran Armda Bulanan') }}</li>
             -->
              <!-- RENCANA BS BULANAN -->
-             <li>{{ Html::link('/reportops','Report Hutang Armada') }}</li>
+            
+            <li>{{ Html::link('/reportops','Report Hutang Armada') }}</li>
             <li>{{ Html::link('/financials/reportbs','Report Armada BS') }}</li>
+            <!--
             <li>{{ Html::link('/cardcontrols/fleets','Kartu Kontrol Armada') }}</li>
+            -->
             <li>{{ Html::link('/warehouses/pemakaianunit','Pemakain Sparepart Armada') }}</li>
             <li>{{ Html::link('/cardcontrols/drivers','Kartu Kontrol Pengemudi') }}</li>
+            
         </ul>
         @endif
 

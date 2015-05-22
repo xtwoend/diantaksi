@@ -37,6 +37,19 @@
                     --}}
                     <li class="m-b hidden-nav-xs"></li>
                   </ul>
+                  @if(Auth::user()->can('kasir'))
+                  <ul class="nav bg clearfix" data-ride="collapse">
+                    <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
+                      Financial menu
+                    </li>
+                     <li>
+                      <a href="{{ url('financials') }}">
+                        <i class="icon-layers icon"></i>
+                        <span class="font-bold">Setoran Operasi</span>
+                      </a>
+                    </li>
+                  </ul>
+                  @endif
                   @if(Auth::user()->can('kontrol-pool'))
                   <ul class="nav" data-ride="collapse">
                     <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">

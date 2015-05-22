@@ -76,9 +76,28 @@ class Financials_Controller extends Base_Controller
         //potongan bs
         $enddatemonth = date('Y-m-t', strtotime($checkin->operasi_time));
         $datechecked = date('Y-m-d', strtotime($enddatemonth. ' -2 days'));
+
         if($checkin->operasi_time > $datechecked)
-        {  
-          $financial = DB::table('financial_report_monthly_bykso')->where('kso_id','=',$checkin->kso_id)->where_month(date('m', strtotime($checkin->operasi_time)))->where_year(date('Y', strtotime($checkin->operasi_time)))->first();
+        {          
+          $financial = DB::table('financial_report_monthly_bykso')
+                        ->where('kso_id','=',$checkin->kso_id)
+                        ->where_month(date('m', strtotime($checkin->operasi_time)))
+                        ->where_year(date('Y', strtotime($checkin->operasi_time)))
+                        ->first();
+          
+          /*
+          $sd = date('Y-m-01', strtotime($checkin->operasi_time));
+          $ed = date('Y-m-d', strtotime($checkin->operasi_time));
+
+          $financial = DB::table('checkins')
+                  ->select(DB::raw('sum(if((checkin_financials.financial_type_id = 1),checkin_financials.amount,0)) AS setoran_wajib,sum(if((checkin_financials.financial_type_id = 2),checkin_financials.amount,0)) AS tabungan_sparepart,sum(if((checkin_financials.financial_type_id = 3),checkin_financials.amount,0)) AS denda,sum(if((checkin_financials.financial_type_id = 4),checkin_financials.amount,0)) AS potongan,sum(if((checkin_financials.financial_type_id = 5),checkin_financials.amount,0)) AS cicilan_sparepart,sum(if((checkin_financials.financial_type_id = 6),checkin_financials.amount,0)) AS cicilan_ks,sum(if((checkin_financials.financial_type_id = 7),checkin_financials.amount,0)) AS biaya_cuci,sum(if((checkin_financials.financial_type_id = 8),checkin_financials.amount,0)) AS iuran_laka,sum(if((checkin_financials.financial_type_id = 9),checkin_financials.amount,0)) AS cicilan_dp_kso,sum(if((checkin_financials.financial_type_id = 10),checkin_financials.amount,0)) AS cicilan_hutang_lama,sum(if((checkin_financials.financial_type_id = 11),checkin_financials.amount,0)) AS ks,sum(if((checkin_financials.financial_type_id = 12),checkin_financials.amount,0)) AS cicilan_lain,sum(if((checkin_financials.financial_type_id = 13),checkin_financials.amount,0)) AS hutang_dp_sparepart,sum(if((checkin_financials.financial_type_id = 20),checkin_financials.amount,0)) AS setoran_cash,sum(if((checkin_financials.financial_type_id = 21),checkin_financials.amount,0)) AS tabungan,(sum(if((checkin_financials.financial_type_id = 11),checkin_financials.amount,0)) - sum(if((checkin_financials.financial_type_id = 6),checkin_financials.amount,0))) AS selisi_ks '))
+                  ->add_select(DB::raw('checkins.id, checkins.operasi_time , checkins.pool_id, checkins.shift_id'))
+                  ->left_join('checkin_financials', 'checkins.id', '=', 'checkin_financials.checkin_id')
+                  ->where_between('checkins.operasi_time',$sd , $ed)
+                  ->where('checkins.kso_id', '=' ,$checkin->kso_id)
+                  ->group_by('checkins.kso_id', 'checkins.operasi_time');
+          */
+         
           $bayar_ks = $financial->cicilan_ks; //bayar ks dalam bulan ini
           $ks = $financial->ks; //ks yang timbul bulan ini 
           $selisih_ks = $financial->selisi_ks;
@@ -119,7 +138,7 @@ class Financials_Controller extends Base_Controller
 
         $tag_ks = 0;
              
-        
+        /*
         if($tagihan_ks)
         { 
           $tag_ks = $tagihan_ks->amount;
@@ -130,6 +149,7 @@ class Financials_Controller extends Base_Controller
               $tagihan_ks->save();
           }
         }
+        */
         //end tagihan ks
 
         //iuran lain-lain

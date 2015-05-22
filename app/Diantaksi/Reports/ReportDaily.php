@@ -187,17 +187,19 @@ class ReportDaily
                 ->where('shift_id', $shift_id)
                 ->get();
 
-      $financialdata = [];
-          //set default 0
-      foreach ($this->label as $key => $value) {
-            $financialdata[$value] = 0;
-      }
+     
       $financialdata['ks'] = 0;
       $financialdata['total'] = 0;
       $financialdata['setoranops'] = 0;
 
       foreach ($checkins as $finan) {
-      
+          
+          $financialdata = [];
+          //set default 0
+          foreach ($this->label as $key => $value) {
+                $financialdata[$value] = 0;
+          }
+          
           $financial = $finan->financial;        
 
           if($financial)
@@ -256,23 +258,18 @@ class ReportDaily
     				'size'  => 16
     	 	));
 
-        $financialdata = [];
-            //set default 0
-        foreach ($this->label as $key => $value) {
-            $financialdata[$value] = 0;
-        }
-
+        
         $sheet_active = 0;
         foreach ($this->fleetmodel->where('actived',1)->get() as $model) 
         {      
           
           $model_id = $model->id;
-          $checkins = $this->checkins->whereHas('fleet', function($query) use ($model_id) {
-                    $query->where('fleet_model_id', $model_id);
-                })
-                ->where('operasi_time',$date)
-                ->where('pool_id', $this->user->pool_id)
-                ->where('shift_id', $shift_id);
+          $checkins = $this->checkins
+                ->join('fleets', 'fleets.id', '=', 'checkins.fleet_id')
+                ->where('checkins.operasi_time',$date)
+                ->where('checkins.pool_id', $this->user->pool_id)
+                ->where('checkins.shift_id', $shift_id)
+                ->where('fleets.fleet_model_id', $model_id);
 
           if( $checkins->count() > 0 ) {
 
@@ -342,7 +339,13 @@ class ReportDaily
             $no = 1;
             $starline = 8;
 
-            foreach ($checkins->get() as $finan) {
+            foreach ($checkins->orderBy('fleets.taxi_number', 'asc')->get() as $finan) {
+              
+              $financialdata = [];
+                  //set default 0
+              foreach ($this->label as $key => $value) {
+                  $financialdata[$value] = 0;
+              }
 
               $driver = $finan->driver;
               $fleet = $finan->fleet;
@@ -357,8 +360,6 @@ class ReportDaily
                   $financialdata[$this->label[$mony->financial_type_id]] = $mony->amount;
                 }
               }
-
-
 
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, $namabapakasuh);

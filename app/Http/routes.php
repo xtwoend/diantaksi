@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::post('pendapatan', 'DashboardController@persentasePendapatan');
 	});
 
+	Route::resource('financials', 'FinancialController');
 });
 
 

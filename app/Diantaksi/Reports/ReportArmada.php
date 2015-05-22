@@ -228,12 +228,6 @@ class ReportArmada
     				'size'  => 16
     	 	));
 
-        $financialdata = [];
-            //set default 0
-        foreach ($this->label as $key => $value) {
-            $financialdata[$value] = 0;
-        }
-
         $checkins = $this->checkins
                 ->whereRaw('YEAR(operasi_time) = ? AND MONTH(operasi_time) = ?',[$year , $month])
                 ->where('kso_id', $kso_id);
@@ -309,6 +303,12 @@ class ReportArmada
 
             foreach ($checkins->get() as $finan) {
 
+              $financialdata = [];
+                  //set default 0
+              foreach ($this->label as $key => $value) {
+                  $financialdata[$value] = 0;
+              }
+
               $driver = $finan->driver;
               $fleet = $finan->fleet;
               $status = $finan->status;
@@ -316,14 +316,13 @@ class ReportArmada
               $bapakasuh = $fleet->bapakasuh()->wherePivot('status',1)->first();
               $namabapakasuh = ($bapakasuh)? $bapakasuh->first_name . ' ' .$bapakasuh->last_name : 'TIDAK ADA BAPAK ASUH';
               
+
               if($financial)
               { 
                 foreach ($financial as $mony) {
                   $financialdata[$this->label[$mony->financial_type_id]] = $mony->amount;
                 }
               }
-
-
 
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, $namabapakasuh);
