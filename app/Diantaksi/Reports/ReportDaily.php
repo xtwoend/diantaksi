@@ -191,14 +191,12 @@ class ReportDaily
       $financialdata['ks'] = 0;
       $financialdata['total'] = 0;
       $financialdata['setoranops'] = 0;
-
-      foreach ($checkins as $finan) {
-          
-          $financialdata = [];
-          //set default 0
-          foreach ($this->label as $key => $value) {
-                $financialdata[$value] = 0;
-          }
+      $financialdata = [];
+      //set default 0
+      foreach ($this->label as $key => $value) {
+        $financialdata[$value] = 0;
+      }
+      foreach ($checkins as $finan) {    
           
           $financial = $finan->financial;        
 
