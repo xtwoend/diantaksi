@@ -6,7 +6,8 @@
 	"type": "project",
 	"require": {
 		"laravel/framework": "5.1.*",
-		"phpoffice/phpexcel": "~1.8.0"
+		"phpoffice/phpexcel": "~1.8.0",
+		"xtwoend/workbench": "5.*@dev"
 	},
 	"require-dev": {
 		"mockery/mockery": "0.9.*",

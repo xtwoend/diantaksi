@@ -266,7 +266,7 @@ class ReportDaily
           $model_id = $model->id;
           $checkins = $this->checkins
                 ->join('fleets', 'fleets.id', '=', 'checkins.fleet_id')
-                ->where('checkins.operasi_time',$date)
+                ->where('checkins.operasi_time', $date)
                 ->where('checkins.pool_id', $this->user->pool_id)
                 ->where('checkins.shift_id', $shift_id)
                 ->where('fleets.fleet_model_id', $model_id);
@@ -339,21 +339,21 @@ class ReportDaily
             $no = 1;
             $starline = 8;
 
-            foreach ($checkins->orderBy('fleets.taxi_number', 'asc')->get() as $finan) {
-              
-              $financialdata = [];
-                  //set default 0
-              foreach ($this->label as $key => $value) {
-                  $financialdata[$value] = 0;
-              }
+            $checkins = $checkins->orderBy('fleets.taxi_number')
+                      ->get(['checkins.*','fleets.taxi_number']);
 
+            foreach ($checkins as $finan) {
               $driver = $finan->driver;
               $fleet = $finan->fleet;
               $status = $finan->status;
               $financial = $finan->financial;
               $bapakasuh = $fleet->bapakasuh()->wherePivot('status',1)->first();
               $namabapakasuh = ($bapakasuh)? $bapakasuh->first_name . ' ' .$bapakasuh->last_name : 'TIDAK ADA BAPAK ASUH';
-              
+              $financialdata = [];
+              //set default 0
+              foreach ($this->label as $key => $value) {
+                $financialdata[$value] = 0;
+              }
               if($financial)
               { 
                 foreach ($financial as $mony) {
@@ -473,13 +473,13 @@ class ReportDaily
             $objPHPExcel->getActiveSheet()->setCellValue('C'.($starline + 10), ':');
             $objPHPExcel->getActiveSheet()->setCellValue('D'.($starline + 10), date('Y-m-d H:i:s'));
 
-            $objPHPExcel->getSecurity()->setLockWindows(true);
-            $objPHPExcel->getSecurity()->setLockStructure(true);
-            $objPHPExcel->getSecurity()->setWorkbookPassword("FreeBlocking");
-            $objPHPExcel->getActiveSheet()->getProtection()->setPassword('FreeBlocking');
-            $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true); // This should be enabled in order to enable any of the following!
+            //$objPHPExcel->getSecurity()->setLockWindows(true);
+            //$objPHPExcel->getSecurity()->setLockStructure(true);
+            //$objPHPExcel->getSecurity()->setWorkbookPassword("FreeBlocking");
+            //$objPHPExcel->getActiveSheet()->getProtection()->setPassword('FreeBlocking');
+            //$objPHPExcel->getActiveSheet()->getProtection()->setSheet(true); // This should be enabled in order to enable any of the following!
             //$objPHPExcel->getActiveSheet()->getProtection()->setSort(true);
-            $objPHPExcel->getActiveSheet()->getProtection()->setInsertRows(true);
+            //$objPHPExcel->getActiveSheet()->getProtection()->setInsertRows(true);
             //$objPHPExcel->getActiveSheet()->getProtection()->setFormatCells(true);
             
             $objPHPExcel->getActiveSheet()->setTitle('Laporan '.$model->fleet_model.' - '. $date );
