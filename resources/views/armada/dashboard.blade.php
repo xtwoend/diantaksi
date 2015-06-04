@@ -36,7 +36,7 @@
 			                        </header>
 			                        <div class="panel-body">
 			                        	<form class="form-inline" role="form" method="GET">
-					                		<input class="input input-s datepicker-input form-control" size="16" type="text" value="{{ $date }}" data-date-format="yyyy-mm-dd" name="date" id="date">
+					                		<input class="input input-s datepicker-input form-control" size="16" type="text" value="{{ $date }}" data-date-format="yyyy-mm-dd" name="date" id="date1">
 					                		<button type="submit" class="btn btn-success">CHECK</button>
 					                	</form>
 					                </div>
@@ -253,6 +253,8 @@
 $('#date').datepicker({
 	viewMode: 1
 });
+
+$('#date1').datepicker();
 
 $(function(){
 	

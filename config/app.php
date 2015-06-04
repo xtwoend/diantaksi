@@ -144,6 +144,10 @@ return [
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
 
+
+        'Xtwoend\Workbench\WorkbenchServiceProvider',
+
+
     ],
 
     /*
