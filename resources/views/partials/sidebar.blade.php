@@ -27,6 +27,12 @@
                         <span class="font-bold">Lap. Finan. Armda</span>
                       </a>
                     </li>
+                    <li>
+                      <a href="{{ url('reports/drivers/activity') }}">
+                        <i class="icon-layers icon"></i>
+                        <span class="font-bold">Lap. Drivers Activity</span>
+                      </a>
+                    </li>
                     {{-- 
                     <li>
                       <a href="{{ url('reports/driver') }}">
