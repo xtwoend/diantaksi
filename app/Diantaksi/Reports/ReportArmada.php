@@ -264,7 +264,7 @@ class ReportArmada
           $saldo =  ($total->cicilan_ks - $total->ks) + ($total->tabungan_sparepart + $total->cicilan_sparepart + $total->hutang_dp_sparepart) - $total_pemakaian_part;
         }
 
-        $saldoks = $total->ks -$total->cicilan_ks;
+        $saldoks = $total->cicilan_ks - $total->ks;
         $saldo_sparepart = $total_pemakaian_part - ($total->cicilan_sparepart + $total->hutang_dp_sparepart + $total->tabungan_sparepart);
         // END DEKRARASI SALDO
 
