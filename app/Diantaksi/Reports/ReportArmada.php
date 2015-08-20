@@ -231,6 +231,42 @@ class ReportArmada
         $checkins = $this->checkins
                 ->whereRaw('YEAR(operasi_time) = ? AND MONTH(operasi_time) = ?',[$year , $month])
                 ->where('kso_id', $kso_id);
+        
+        // TOTAL QUERY
+        $total = DB::table('checkins')
+                  ->select(DB::raw('sum(if((checkin_financials.financial_type_id = 1),checkin_financials.amount,0)) AS setoran_wajib,sum(if((checkin_financials.financial_type_id = 2),checkin_financials.amount,0)) AS tabungan_sparepart,sum(if((checkin_financials.financial_type_id = 3),checkin_financials.amount,0)) AS denda,sum(if((checkin_financials.financial_type_id = 4),checkin_financials.amount,0)) AS potongan,sum(if((checkin_financials.financial_type_id = 5),checkin_financials.amount,0)) AS cicilan_sparepart,sum(if((checkin_financials.financial_type_id = 6),checkin_financials.amount,0)) AS cicilan_ks,sum(if((checkin_financials.financial_type_id = 7),checkin_financials.amount,0)) AS biaya_cuci,sum(if((checkin_financials.financial_type_id = 8),checkin_financials.amount,0)) AS iuran_laka,sum(if((checkin_financials.financial_type_id = 9),checkin_financials.amount,0)) AS cicilan_dp_kso,sum(if((checkin_financials.financial_type_id = 10),checkin_financials.amount,0)) AS cicilan_hutang_lama,sum(if((checkin_financials.financial_type_id = 11),checkin_financials.amount,0)) AS ks,sum(if((checkin_financials.financial_type_id = 12),checkin_financials.amount,0)) AS cicilan_lain,sum(if((checkin_financials.financial_type_id = 13),checkin_financials.amount,0)) AS hutang_dp_sparepart,sum(if((checkin_financials.financial_type_id = 20),checkin_financials.amount,0)) AS setoran_cash,sum(if((checkin_financials.financial_type_id = 21),checkin_financials.amount,0)) AS tabungan,(sum(if((checkin_financials.financial_type_id = 11),checkin_financials.amount,0)) - sum(if((checkin_financials.financial_type_id = 6),checkin_financials.amount,0))) AS selisi_ks '))
+                  ->addSelect(DB::raw('checkins.id, checkins.operasi_time , checkins.pool_id, checkins.shift_id'))
+                  ->leftJoin('checkin_financials', 'checkins.id', '=', 'checkin_financials.checkin_id')
+                  ->where('checkins.kso_id', $kso_id)
+                  ->where('checkins.operasi_time', '<=' , $date)
+                  ->groupBy('checkins.kso_id')
+                  ->first();
+
+        $sparepart = DB::table('work_orders')
+                    ->select(DB::raw('work_orders.id AS id,work_orders.kso_id AS kso_id,work_orders.wo_number AS wo_number,work_orders.fleet_id AS fleet_id,work_orders.driver_id AS driver_id,work_orders.pool_id AS pool_id,work_orders.km AS km,work_orders.complaint AS complaint,work_orders.information_complaint AS information_complaint,work_orders.status AS status,work_orders.beban AS beban,work_orders.mechanic_id AS mechanic_id,work_orders.mechanic AS mechanic,work_orders.dp_sparepart AS dp_sparepart,work_orders.user_id AS user_id,work_orders.inserted_date_set AS inserted_date_set,work_orders.finished_date_set AS finished_date_set,work_orders.fg_part_approved AS fg_part_approved,work_orders.user_approved AS user_approved,sum((wo_part_items.qty * wo_part_items.price)) AS pemakaian_part'))
+                    ->leftJoin('wo_part_items', 'work_orders.id', '=', 'wo_part_items.wo_id')
+                    ->where('work_orders.status', 3)
+                    ->where('wo_part_items.telah_dikeluarkan', 1)
+                    ->where('work_orders.beban', 0)
+                    ->where('work_orders.kso_id', $kso_id)
+                    ->where('work_orders.finished_date_set', '<=' , $date)
+                    ->groupBy('work_orders.kso_id')
+                    ->first();
+        
+        $total_pemakaian_part = 0;
+        if($sparepart)
+        {
+          $total_pemakaian_part = $sparepart->pemakaian_part;
+        }
+        // END TOTAL QUERY
+        if($total)
+        {
+          $saldo =  ($total->cicilan_ks - $total->ks) + ($total->tabungan_sparepart + $total->cicilan_sparepart + $total->hutang_dp_sparepart) - $total_pemakaian_part;
+        }
+
+        $saldoks = $total->ks -$total->cicilan_ks;
+        $saldo_sparepart = $total_pemakaian_part - ($total->cicilan_sparepart + $total->hutang_dp_sparepart + $total->tabungan_sparepart);
+        // END DEKRARASI SALDO
 
         $sheet_active = 0;
           if( $checkins->count() > 0 ) {
@@ -242,6 +278,20 @@ class ReportArmada
 
             $objPHPExcel->getActiveSheet()->setCellValue('A2', 'LAPORAN ARMADA '. $kso->fleet->taxi_number .' PENDAPATAN BULAN ' . $date  );
             $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray($styleArray);
+
+            $objPHPExcel->getActiveSheet()->setCellValue('B3', 'NAMA');
+            $objPHPExcel->getActiveSheet()->setCellValue('B4', 'BODY');
+            $objPHPExcel->getActiveSheet()->setCellValue('H3', 'SALDO KS');
+            $objPHPExcel->getActiveSheet()->setCellValue('H4', 'SALDO SPAREPART');
+            $objPHPExcel->getActiveSheet()->setCellValue('K4', 'SALDO UNIT');
+
+            // SALDO VALUE
+            $objPHPExcel->getActiveSheet()->setCellValue('C3', $kso->bravo->name);
+            $objPHPExcel->getActiveSheet()->setCellValue('C4', $kso->fleet->taxi_number);
+            $objPHPExcel->getActiveSheet()->setCellValue('I3', $saldoks);
+            $objPHPExcel->getActiveSheet()->setCellValue('I4', $saldo_sparepart);
+            $objPHPExcel->getActiveSheet()->setCellValue('L4', $saldo);
+            // END SALDO VALUE
 
             $objPHPExcel->getActiveSheet()->mergeCells('A5:A6');
             $objPHPExcel->getActiveSheet()->mergeCells('B5:B6');
@@ -436,14 +486,14 @@ class ReportArmada
             $objPHPExcel->getActiveSheet()->setCellValue('C'.($starline + 10), ':');
             $objPHPExcel->getActiveSheet()->setCellValue('D'.($starline + 10), date('Y-m-d H:i:s'));
 
-            $objPHPExcel->getSecurity()->setLockWindows(true);
-            $objPHPExcel->getSecurity()->setLockStructure(true);
-            $objPHPExcel->getSecurity()->setWorkbookPassword("FreeBlocking");
-            $objPHPExcel->getActiveSheet()->getProtection()->setPassword('FreeBlocking');
-            $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true); // This should be enabled in order to enable any of the following!
-            //$objPHPExcel->getActiveSheet()->getProtection()->setSort(true);
-            $objPHPExcel->getActiveSheet()->getProtection()->setInsertRows(true);
-            //$objPHPExcel->getActiveSheet()->getProtection()->setFormatCells(true);
+            // $objPHPExcel->getSecurity()->setLockWindows(true);
+            // $objPHPExcel->getSecurity()->setLockStructure(true);
+            // $objPHPExcel->getSecurity()->setWorkbookPassword("FreeBlocking");
+            // $objPHPExcel->getActiveSheet()->getProtection()->setPassword('FreeBlocking');
+            // $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true); // This should be enabled in order to enable any of the following!
+            // //$objPHPExcel->getActiveSheet()->getProtection()->setSort(true);
+            // $objPHPExcel->getActiveSheet()->getProtection()->setInsertRows(true);
+            // //$objPHPExcel->getActiveSheet()->getProtection()->setFormatCells(true);
             
             $objPHPExcel->getActiveSheet()->setTitle('Laporan '. $date );
             $sheet_active++;
