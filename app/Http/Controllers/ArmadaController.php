@@ -68,7 +68,7 @@ class ArmadaController extends Controller
         $date = $request->get('date', date('Y-m-d'));
 
         $ksos = $this->ksos
-                ->leftJoin('fleets', 'ksos.fleet_id','=', 'fleets.id')
+                ->join('fleets', 'ksos.fleet_id','=', 'fleets.id')
                 ->where('ksos.pool_id', Auth::user()->pool_id)
                 ->where('ksos.actived', 1)
                 ->orderBy('fleets.taxi_number')
