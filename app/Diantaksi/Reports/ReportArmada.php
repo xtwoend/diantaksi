@@ -286,7 +286,7 @@ class ReportArmada
             $objPHPExcel->getActiveSheet()->setCellValue('K4', 'SALDO UNIT');
 
             // SALDO VALUE
-            $objPHPExcel->getActiveSheet()->setCellValue('C3', $kso->bravo->name);
+            $objPHPExcel->getActiveSheet()->setCellValue('C3', (isset($kso->bravo))? $kso->bravo->name : 'Unknown Driver');
             $objPHPExcel->getActiveSheet()->setCellValue('C4', $kso->fleet->taxi_number);
             $objPHPExcel->getActiveSheet()->setCellValue('I3', $saldoks);
             $objPHPExcel->getActiveSheet()->setCellValue('I4', $saldo_sparepart);
@@ -366,6 +366,8 @@ class ReportArmada
               $bapakasuh = $fleet->bapakasuh()->wherePivot('status',1)->first();
               $namabapakasuh = ($bapakasuh)? $bapakasuh->first_name . ' ' .$bapakasuh->last_name : 'TIDAK ADA BAPAK ASUH';
               
+              $nip = ($driver)? $driver->nip : '0000';
+              $name = ($driver)? $driver->name : 'Unknown Driver';
 
               if($financial)
               { 
@@ -376,8 +378,8 @@ class ReportArmada
 
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, $namabapakasuh);
-              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $starline, $driver->nip);
-              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $starline, $driver->name);
+              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $starline, $nip);
+              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $starline, $name);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $starline, $finan->operasi_time);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $starline, $status->kode);
               $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $starline, '');
