@@ -72,7 +72,6 @@ class ReportController extends Controller
         return $this->dailyreport->dailyexport($request);
     }
 
-
     /**
      * Display a listing of the resource.
      *

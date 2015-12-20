@@ -22,11 +22,16 @@
                       		<option value="2">Kalong</option>
                       	</select>                  
                     </div>
-                    
+                   
+                    <div class="checkbox i-checks">
+                          <label>
+                            <input type="checkbox" name="kso_type_id" value="2"><i></i> PW
+                          </label>
+                        </div>
                     <button type="button" class="btn btn-primary" id="viewsReport">Tampilkan</button>
 
                     <button type="submit" class="btn btn-success" data-toggle="modal">Download</button>
-                  </form>                  
+
                 </div>
             </section>
 

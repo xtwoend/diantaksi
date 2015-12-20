@@ -240,6 +240,7 @@ class ReportDaily
     {
         $date 		= $request->get('date', date('Y-m-d'));
         $shift_id 	= $request->get('shift_id', 0);
+        $kso_type = $request->get('kso_type_id', 1);
 
       	$objPHPExcel = new PHPExcel();
       	$objPHPExcel->getProperties()->setCreator($this->user->fullname)
@@ -264,10 +265,12 @@ class ReportDaily
           $model_id = $model->id;
           $checkins = $this->checkins
                 ->join('fleets', 'fleets.id', '=', 'checkins.fleet_id')
+                ->join('ksos', 'ksos.id', '=', 'checkins.kso_id')
                 ->where('checkins.operasi_time', $date)
                 ->where('checkins.pool_id', $this->user->pool_id)
                 ->where('checkins.shift_id', $shift_id)
-                ->where('fleets.fleet_model_id', $model_id);
+                ->where('fleets.fleet_model_id', $model_id)
+                ->where('ksos.kso_type_id', $kso_type);
 
           if( $checkins->count() > 0 ) {
 
@@ -487,9 +490,11 @@ class ReportDaily
         }
 
       $shift = [1=>'Reguler', 2=>'Kalong'];
-
+      $pw = $request->has('kso_type_id')? 'PW': '';
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save(storage_path('excels/').'L'. $this->user->pool_id.$shift_id.$date.'.xls');
-    	return response()->download(storage_path('excels/').'L'. $this->user->pool_id.$shift_id.$date.'.xls', 'Laporan-Harian-'.Str::slug($this->user->pool->pool_name, '-'). '-'. $shift[$shift_id] .'-Tanggal-'. $date .'.xls' );
+    	return response()->download(storage_path('excels/').'L'. $this->user->pool_id.$shift_id.$date.'.xls', 'Laporan-'.$pw.'-Harian-'.Str::slug($this->user->pool->pool_name, '-'). '-'. $shift[$shift_id] .'-Tanggal-'. $date .'.xls' );
     }
+
+    
 }
