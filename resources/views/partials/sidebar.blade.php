@@ -43,6 +43,19 @@
                     --}}
                     <li class="m-b hidden-nav-xs"></li>
                   </ul>
+
+                  <ul class="nav bg clearfix" data-ride="collapse">
+                    <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">
+                      Laporan Sparepart
+                    </li>
+                    <li>
+                      <a href="{{ url('reports/armada/pemakaian') }}">
+                        <i class="icon-layers icon"></i>
+                        <span class="font-bold">Lap. Pem. Armda</span>
+                      </a>
+                    </li>
+                  </ul>
+
                   @if(Auth::user()->can('kasir'))
                   <ul class="nav bg clearfix" data-ride="collapse">
                     <li class="hidden-nav-xs padder m-t m-b-sm text-xs text-muted">

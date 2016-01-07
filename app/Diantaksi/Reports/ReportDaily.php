@@ -88,7 +88,8 @@ class ReportDaily
     public function dailyjson(Request $request)
     {
     	  $date 		= $request->get('dateops', date('Y-m-d'));
-      	$shift_id	= $request->get('shift_id', 0);
+      	$shift_id	= $request->get('shift_id', 0);        
+        $kso_type = $request->get('kso_type_id', 1);
       	$page 		= $request->get('page');
       	$limit 		= $request->get('rows');
       	$sidx 		= $request->get('sidx', 'id');
@@ -96,9 +97,12 @@ class ReportDaily
 
       	$checkins = $this->checkins
                 ->join('fleets', 'checkins.fleet_id', '=', 'fleets.id')
+                ->join('ksos', 'ksos.id', '=', 'checkins.kso_id')
                 ->where('checkins.operasi_time',$date)
       					->where('checkins.pool_id', $this->user->pool_id)
-      					->where('checkins.shift_id', $shift_id);
+      					->where('checkins.shift_id', $shift_id)
+                ->where('ksos.kso_type_id', $kso_type);
+
 
       	$count = $checkins->count();
       	if( $count > 0 ) {

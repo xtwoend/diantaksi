@@ -27,6 +27,11 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::group(['prefix'=>'reports'], function(){
 		
+		// report gudang
+		Route::get('armada/pemakaian.xls', 'WirehouseController@reportPemakaianDownload');
+		Route::post('armada/pemakaian.json', 'WirehouseController@reportPemakaian');	
+		Route::get('armada/pemakaian', 'WirehouseController@viewPemakaian');
+
 		Route::get('daily', 'ReportController@daily');
 		Route::post('daily.json', 'ReportController@dailyjson');
 		Route::get('daily.xlsx', 'ReportController@dailyexport');
@@ -43,7 +48,7 @@ Route::group(['middleware' => ['auth']], function(){
 		Route::post('armada/hutang', 'ArmadaController@hutang');
 		Route::get('armada/{id}', 'ArmadaController@index');
 
-		Route::get('drivers/activity', 'DriverController@activity');		
+		Route::get('drivers/activity', 'DriverController@activity');	
 	});
 
 	Route::group(['prefix'=> 'statistics'], function(){
