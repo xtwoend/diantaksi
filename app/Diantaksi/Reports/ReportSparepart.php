@@ -136,9 +136,9 @@ class ReportSparepart
 
         	$dbQuery = $this->queryDataPerBody($month, $year, $pool, $rew->fleet_id);
         	
-        	
         	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
         	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $starline, $rew->taxi_number);
+        	$xline = $starline;
         	foreach ($dbQuery as $row) {       		        	
 	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, date('d/m/Y',strtotime($row->inserted_date_set)));
 	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $starline, $row->wo_number);
@@ -152,13 +152,14 @@ class ReportSparepart
 	        }
 
 	        $objPHPExcel->getActiveSheet()->setCellValue('I'.($starline),'SUB TOTAL');
-        	$objPHPExcel->getActiveSheet()->setCellValue('J'.($starline), '=SUM(J8:J'.$starline.')');
+        	$objPHPExcel->getActiveSheet()->setCellValue('J'.($starline), '=SUM(J'.$xline.':J'.$starline.')');
+
         	$starline ++;
         	$no ++;
         }
 
         $objPHPExcel->getActiveSheet()->setCellValue('F'.($starline + 1),'GRAND TOTAL');
-        $objPHPExcel->getActiveSheet()->setCellValue('J'.($starline + 1), '=SUM(J8:J'.$starline.')');
+        $objPHPExcel->getActiveSheet()->setCellValue('J'.($starline + 1), '=SUM(J7:J'.$starline.')');
 
         $objPHPExcel->getActiveSheet()->getStyle('A5:J'.($starline + 1))->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_HAIR);
         $objPHPExcel->getActiveSheet()->getStyle('A5:J6')->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
