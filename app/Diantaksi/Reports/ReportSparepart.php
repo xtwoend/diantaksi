@@ -86,7 +86,7 @@ class ReportSparepart
 		
 		$pool = Auth::user()->pool_id;
 
-		$dbQuery = $this->queryData($month, $year, $pool);
+		
 
 		$objPHPExcel = new PHPExcel();
       	$objPHPExcel->getProperties()->setCreator($this->user->fullname)
@@ -111,9 +111,7 @@ class ReportSparepart
         $objPHPExcel->getActiveSheet()->mergeCells('A2:J2');
 
         $objPHPExcel->getActiveSheet()->setCellValue('A2', 'LAPORAN PEMAKAIAN SPAREPART TANGGAL ' . $date  );
-        $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray($styleArray);
-
-      
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->applyFromArray($styleArray);      
         
         $objPHPExcel->getActiveSheet()->setCellValue('A5', 'NO');
         $objPHPExcel->getActiveSheet()->setCellValue('B5', 'TANGGAL');
@@ -130,20 +128,33 @@ class ReportSparepart
 
         $no = 1;
         $starline = 7;
-        foreach ($dbQuery as $row) {
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, date('d/m/Y',strtotime($row->inserted_date_set)));
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $starline, $row->taxi_number);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $starline, $row->wo_number);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $starline, $row->part_number);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $starline, $row->name_sparepart);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $starline, $row->qty);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $starline, $row->satuan);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $starline, $row->price);
-        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $starline, $row->subtotal);
+        $tempBody = '';
 
+        $groupByArmada = $this->queryGroupArmada($month, $year, $pool);
+        
+        foreach ($groupByArmada as $rew) {
+
+        	$dbQuery = $this->queryDataPerBody($month, $year, $pool, $rew->fleet_id);
+        	
+        	
+        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $starline, $no);
+        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $starline, $rew->taxi_number);
+        	foreach ($dbQuery as $row) {       		        	
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $starline, date('d/m/Y',strtotime($row->inserted_date_set)));
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $starline, $row->wo_number);
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $starline, $row->part_number);
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $starline, $row->name_sparepart);
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $starline, $row->qty);
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $starline, $row->satuan);
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $starline, $row->price);
+	        	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $starline, $row->subtotal);	        	
+	            $starline ++;
+	        }
+
+	        $objPHPExcel->getActiveSheet()->setCellValue('I'.($starline),'SUB TOTAL');
+        	$objPHPExcel->getActiveSheet()->setCellValue('J'.($starline), '=SUM(J8:J'.$starline.')');
+        	$starline ++;
         	$no ++;
-            $starline ++;
         }
 
         $objPHPExcel->getActiveSheet()->setCellValue('F'.($starline + 1),'GRAND TOTAL');
@@ -200,6 +211,93 @@ class ReportSparepart
 					and `wo`.`pool_id` = ? 
 					order by `fleets`.`taxi_number`, `wo`.`inserted_date_set` asc";
 
+		return DB::select($query, [$month, $year, $pool]);
+	}
+
+	protected function queryDataPerBody($month, $year, $pool, $fleet)
+	{
+		$query = "select `wo`.`id` AS `id`,
+				`wo`.`kso_id` AS `kso_id`,
+				`wo`.`wo_number` AS `wo_number`,
+				`wo`.`fleet_id` AS `fleet_id`,
+				`wo`.`driver_id` AS `driver_id`,
+				`wo`.`pool_id` AS `pool_id`,
+				`wo`.`km` AS `km`,
+				`wo`.`complaint` AS `complaint`,
+				`wo`.`information_complaint` AS `information_complaint`,
+				`wo`.`status` AS `status`,
+				`wo`.`mechanic_id` AS `mechanic_id`,
+				`wo`.`mechanic` AS `mechanic`,
+				`wo`.`dp_sparepart` AS `dp_sparepart`,
+				`wo`.`user_id` AS `user_id`,
+				`wo`.`inserted_date_set` AS `inserted_date_set`,
+				`wo`.`finished_date_set` AS `finished_date_set`,
+				`wo`.`fg_part_approved` AS `fg_part_approved`,
+				`wo`.`user_approved` AS `user_approved`,
+				`item`.`sparepart_id` AS `sparepart_id`,
+				`item`.`qty` AS `qty`,
+				`item`.`price` AS `price`,
+				`sp`.`part_number` AS `part_number`,
+				`sp`.`name_sparepart` AS `name_sparepart`,
+				`sp`.`satuan` AS `satuan`,
+				`sp`.`isi_satuan` AS `isi_satuan`,
+				`fleets`.`taxi_number` AS 'taxi_number',
+				month(`wo`.`inserted_date_set`) AS `month`,
+				year(`wo`.`inserted_date_set`) AS `year`,
+				(`item`.`qty` * `item`.`price`) AS `subtotal` 
+				from ((`wo_part_items` `item` join `work_orders` `wo` on((`item`.`wo_id` = `wo`.`id`))) 
+					join `spareparts` `sp` on((`item`.`sparepart_id` = `sp`.`id`))) 
+					join `fleets` on (`wo`.`fleet_id` = `fleets`.`id`)
+					where ((`wo`.`status` = 3) and (`item`.`telah_dikeluarkan` = 1)) 
+					and month(`wo`.`inserted_date_set`) = ?
+					and year(`wo`.`inserted_date_set`) = ?
+					and `wo`.`pool_id` = ? 
+					and `wo`.`fleet_id` = ?
+					order by `fleets`.`taxi_number`, `wo`.`inserted_date_set` asc";
+
+		return DB::select($query, [$month, $year, $pool, $fleet]);
+	}
+
+	public function queryGroupArmada($month, $year, $pool)
+	{
+		$query = "select `wo`.`id` AS `id`,				
+				`wo`.`kso_id` AS `kso_id`,
+				`wo`.`wo_number` AS `wo_number`,
+				`wo`.`fleet_id` AS `fleet_id`,
+				`wo`.`driver_id` AS `driver_id`,
+				`wo`.`pool_id` AS `pool_id`,
+				`wo`.`km` AS `km`,
+				`wo`.`complaint` AS `complaint`,
+				`wo`.`information_complaint` AS `information_complaint`,
+				`wo`.`status` AS `status`,
+				`wo`.`mechanic_id` AS `mechanic_id`,
+				`wo`.`mechanic` AS `mechanic`,
+				`wo`.`dp_sparepart` AS `dp_sparepart`,
+				`wo`.`user_id` AS `user_id`,
+				`wo`.`inserted_date_set` AS `inserted_date_set`,
+				`wo`.`finished_date_set` AS `finished_date_set`,
+				`wo`.`fg_part_approved` AS `fg_part_approved`,
+				`wo`.`user_approved` AS `user_approved`,
+				`item`.`sparepart_id` AS `sparepart_id`,
+				`item`.`qty` AS `qty`,
+				`item`.`price` AS `price`,
+				`sp`.`part_number` AS `part_number`,
+				`sp`.`name_sparepart` AS `name_sparepart`,
+				`sp`.`satuan` AS `satuan`,
+				`sp`.`isi_satuan` AS `isi_satuan`,
+				`fleets`.`taxi_number` AS 'taxi_number',
+				month(`wo`.`inserted_date_set`) AS `month`,
+				year(`wo`.`inserted_date_set`) AS `year`,
+				sum(`item`.`qty` * `item`.`price`) AS `subtotal` 
+				from ((`wo_part_items` `item` join `work_orders` `wo` on((`item`.`wo_id` = `wo`.`id`))) 
+					join `spareparts` `sp` on((`item`.`sparepart_id` = `sp`.`id`))) 
+					join `fleets` on (`wo`.`fleet_id` = `fleets`.`id`)
+					where ((`wo`.`status` = 3) and (`item`.`telah_dikeluarkan` = 1)) 
+					and month(`wo`.`inserted_date_set`) = ?
+					and year(`wo`.`inserted_date_set`) = ?
+					and `wo`.`pool_id` = ? 
+					GROUP BY `wo`.`fleet_id`
+					order by `fleets`.`taxi_number`, `wo`.`inserted_date_set`";
 
 		return DB::select($query, [$month, $year, $pool]);
 	}
