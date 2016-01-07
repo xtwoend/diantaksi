@@ -153,7 +153,7 @@ class ReportSparepart
 	        }
 
 	        $objPHPExcel->getActiveSheet()->setCellValue('I'.($starline),'SUB TOTAL');
-        	$objPHPExcel->getActiveSheet()->setCellValue('J'.($starline), '=SUM(J'.$xline.':J'.$starline -1 .')');
+        	$objPHPExcel->getActiveSheet()->setCellValue('J'.($starline), '=SUM(J'.$xline.':J'. ($starline - 1) .')');
 
         	$starline ++;
         	$no ++;
