@@ -150,6 +150,11 @@ a:hover .caret-white {
 .form-control:focus {
   border-color: #545ca6;
 }
+
+.form-horizontal .control-label {
+  text-align: left;
+}
+
 .input-s-sm {
   width: 120px;
 }
