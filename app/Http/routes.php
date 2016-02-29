@@ -56,8 +56,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('financials', 'FinancialController');
 
     Route::group(['prefix' => 'gudang'], function () {
-        Route::resource('penerimaan', 'PSController');
+
+        Route::get('penerimaan/supplier', ['uses' => 'PSController@getSuplier', 'as' => 'gudang.penerimaan.supplier']);
         Route::post('penerimaan/item/update', ['uses' => 'PSController@itemUpdate', 'as' => 'gudang.penerimaan.item.update']);
+        Route::resource('penerimaan', 'PSController');
     });
 });
 

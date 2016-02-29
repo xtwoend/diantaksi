@@ -16,7 +16,7 @@
                 				<div class="form-group">
 		                          	<label class="col-lg-3 control-label">Suppiler</label>
 		                          	<div class="col-lg-9">
-		                            	<input type="text" class="form-control" placeholder="Suppiler">
+		                            	<input type="text" class="form-control" placeholder="Suppiler" id="supplier">
 		                            </div>
 		                        </div>
 		                        <div class="form-group">
@@ -97,7 +97,7 @@
 					                        <th  style="width:25%">Nama Sparepart</th>
 					                        <th  style="width:8%">Qty</th>
 					                        <th  style="width:10%">@Harga</th>
-					                        <th  style="width:12%">Sub Total</th>
+					                        <!-- <th  style="width:12%">Sub Total</th> -->
 					                        <th  style="width:25%">Keterangan</th>
 					                        <th  style="width:5%"></th>
 				                      	</tr>
@@ -110,7 +110,7 @@
 				                    		<td>BAUT 12                          UM</td>
 				                    		<td contenteditable="true" id="{{ $i }}" field="qty">10</td>
 				                    		<td contenteditable="true" id="{{ $i }}" field="price">20000</td>
-				                    		<td>200000</td>
+				                    		<!-- <td>200000</td> -->
 				                    		<td contenteditable="true" id="{{ $i }}" field="description"></td>
 				                    		<td><div class="btn btn-default btn-xs"><i class="fa fa-trash-o text-muted"></i></div></td>
 				                    	</tr>
@@ -141,6 +141,14 @@
 @section('js')
 <script type="text/javascript">
 $(function(){
+
+	$('#supplier').autocomplete({
+	    serviceUrl: '{{ route('gudang.penerimaan.supplier') }}',
+	    // lookup: countries,
+	    onSelect: function (suggestion) {
+	        alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+	    }
+	});
 	$("table#item-penerimaan td[contenteditable=true]").blur(function(e){
 		e.preventDefault();
         var id = $(this).attr("id");
@@ -158,7 +166,7 @@ $(function(){
             /* FOCUS ELEMENT */
             var inputs = $(this).parents("form").eq(0).find(":input");
             var idx = inputs.index(this);
-            console.log(inputs);
+
             if (idx == inputs.length - 1) {
                 inputs[0].select()
             } else {
