@@ -43,7 +43,6 @@
   <script src="/js/app.plugin.js"></script>
   <!-- datepicker -->
   <script src="/js/datepicker/bootstrap-datepicker.js"></script>
-  <script src="/js/jquery.autocomplete.js"></script>
   <!-- jq grid -->
   <script src="/js/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
   <script src="/js/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>

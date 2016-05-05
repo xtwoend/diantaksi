@@ -1,6 +1,8 @@
 @extends('main')
 
 @section('css')
+<link rel="stylesheet" href="/js/easyautocomplete/easy-autocomplete.css" type="text/css" />
+<link rel="stylesheet" href="/js/easyautocomplete/easy-autocomplete.themes.css" type="text/css" />
 @endsection
 
 @section('content')
@@ -139,16 +141,38 @@
 @endsection
 
 @section('js')
+<script src="/js/easyautocomplete/jquery.easy-autocomplete.js"></script>
 <script type="text/javascript">
 $(function(){
 
-	$('#supplier').autocomplete({
-	    serviceUrl: '{{ route('gudang.penerimaan.supplier') }}',
-	    // lookup: countries,
-	    onSelect: function (suggestion) {
-	        alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-	    }
-	});
+	var options = {
+
+		url: function(phrase) {
+			return '{{ route('gudang.penerimaan.supplier') }}';
+		},
+
+		getValue: function(element) {
+			return element.name;
+		},
+
+		ajaxSettings: {
+		    dataType: "json",
+		    method: "POST",
+		    data: {
+		      	dataType: "json"
+		    }
+		},
+
+		preparePostData: function(data) {
+		    data.phrase = $("#supplier").val();
+		    return data;
+		},
+
+		requestDelay: 400
+	};
+
+	$("#supplier").easyAutocomplete(options);
+
 	$("table#item-penerimaan td[contenteditable=true]").blur(function(e){
 		e.preventDefault();
         var id = $(this).attr("id");
