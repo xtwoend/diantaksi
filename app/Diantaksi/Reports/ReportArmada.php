@@ -147,7 +147,7 @@ class ReportArmada
         		'no' => $no,
         		'nip' => ($driver)? $driver->nip: 'N/A',
 				    'nama' => ($driver)? $driver->name: 'N/A',
-				    'checkin_time' => $finan->checkin_time->format('Y-m-d H:i:s'),
+				    'checkin_time' => $finan->checkin_time,
             'bapakasuh' => $namabapakasuh,
             'operasi_time' => $finan->operasi_time,
             'operasi_status_id' => ($status)? $status->kode: 'N/A',
