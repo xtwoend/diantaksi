@@ -140,7 +140,7 @@ class ReportDaily
         		'taxi_number' => $finan->taxi_number, 
         		'nip' => ($driver)? $driver->nip: 'N/A',
 				    'nama' => ($driver)? $driver->name: 'N/A',
-				    'checkin_time' => $finan->checkin_time->format('Y-m-d H:i:s'),
+				    'checkin_time' => $finan->checkin_time,
             'bapakasuh' => $namabapakasuh,
             //'shift_id' => $finan->shift_id,
             'operasi_status_id' => ($status)? $status->kode: 'N/A',
