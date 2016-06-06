@@ -259,13 +259,20 @@ class ReportArmada
           $total_pemakaian_part = $sparepart->pemakaian_part;
         }
         // END TOTAL QUERY
+        $saldo = 0;
         if($total)
         {
           $saldo =  ($total->cicilan_ks - $total->ks) + ($total->tabungan_sparepart + $total->cicilan_sparepart + $total->hutang_dp_sparepart) - $total_pemakaian_part;
         }
+        $total_ks = ($total)?  $total->ks: 0;
+        $cicilan_ks = ($total)? $total->cicilan_ks : 0;
+        $cicilan_sparepart = ($total)? $total->cicilan_sparepart : 0;
+        $tabungan_sparepart = ($total)? $total->tabungan_sparepart : 0;
+        $hutang_dp_sparepart = ($total)? $total->hutang_dp_sparepart : 0;
 
-        $saldoks = $total->cicilan_ks - $total->ks;
-        $saldo_sparepart = $total_pemakaian_part - ($total->cicilan_sparepart + $total->hutang_dp_sparepart + $total->tabungan_sparepart);
+
+        $saldoks = $cicilan_ks - $total_ks;
+        $saldo_sparepart = $total_pemakaian_part - ($cicilan_sparepart + $hutang_dp_sparepart + $tabungan_sparepart);
         // END DEKRARASI SALDO
 
         $sheet_active = 0;
